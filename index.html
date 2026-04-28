@@ -8,8 +8,16 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0; /* gris claro */
+      background-color: #f0f0f0;
+      overflow-x: hidden;
     }
+
+    /* Animación de aparición */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     section {
       position: relative;
       min-height: 100vh;
@@ -20,47 +28,63 @@
       text-align: center;
       overflow: hidden;
     }
-    section img {
-      width: 100%;
-      height: auto;
-      opacity: 0.9;
+
+    /* Fondo parallax para el carrito */
+    .parallax {
+      background-image: url('carrito.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
     }
+
+    /* Fondo fijo para equipos */
+    .fixed-bg {
+      background-image: url('equipos.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
     .overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       color: #000;
       text-shadow: 1px 1px 3px #fff;
       width: 90%;
+      animation: fadeIn 1.5s ease-out;
     }
+
     .overlay h1, .overlay h2 {
-      font-size: 32px;
-      margin-bottom: 15px;
+      font-size: 42px;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
+
     .overlay p {
-      font-size: 20px;
+      font-size: 24px;
       margin-bottom: 20px;
     }
+
     button {
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 20px 40px;
-      font-size: 22px;
+      padding: 22px 44px;
+      font-size: 24px;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 15px;
+      animation: fadeIn 2s ease-out;
     }
+
     button:hover {
       background-color: #004c99;
     }
+
     .bottom {
       position: absolute;
       bottom: 20px;
       width: 100%;
       text-align: center;
     }
+
     .links a {
       color: #0066cc;
       text-decoration: none;
@@ -68,6 +92,7 @@
       font-weight: bold;
       font-size: 18px;
     }
+
     .contacto {
       margin-bottom: 10px;
       font-size: 18px;
@@ -76,19 +101,17 @@
   </style>
 </head>
 <body>
-  <!-- Primera sección con carrito -->
-  <section>
-    <img src="carrito.jpg" alt="Carrito con equipos">
+  <!-- Primera sección con carrito (fondo parallax) -->
+  <section class="parallax">
     <div class="overlay">
-      <h1>🛒 ¡Bienvenido a ElectroMarket Holguín!</h1>
+      <h1>🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
       <p>✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
       <button onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
     </div>
   </section>
 
-  <!-- Segunda sección con equipos -->
-  <section>
-    <img src="equipos.jpg" alt="Electrodomésticos">
+  <!-- Segunda sección con equipos (fondo fijo + efecto letras) -->
+  <section class="fixed-bg">
     <div class="overlay">
       <h2>⚙️ ¿Cómo funciona nuestra tienda?</h2>
       <p>
