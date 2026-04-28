@@ -9,81 +9,80 @@
       margin: 0;
       font-family: Arial, sans-serif;
       color: #333;
+      background-color: #ffffff;
     }
     section {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
       text-align: center;
-      color: white;
-      text-shadow: 1px 1px 3px black;
-      padding-bottom: 40px;
+      padding: 40px 20px;
     }
-    .hero1 {
-      background-image: url('carrito.jpg'); /* primera imagen: carrito con equipos */
-      background-size: cover;
-      background-position: center;
+    section img {
+      max-width: 90%;
+      height: auto;
+      margin-bottom: 20px;
     }
-    .hero2 {
-      background-image: url('equipos.jpg'); /* segunda imagen: equipos */
-      background-size: cover;
-      background-position: center;
-      justify-content: center;
-      padding: 60px;
+    h1, h2 {
+      margin: 10px 0;
+    }
+    p {
+      margin: 10px 0;
     }
     button {
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 15px 30px;
-      font-size: 18px;
+      padding: 18px 36px; /* botón más grande */
+      font-size: 20px;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 15px; /* espacio entre mensaje y botón */
     }
     button:hover {
       background-color: #004c99;
     }
     .links {
-      margin-top: 20px;
+      margin-top: 15px;
     }
     .links a {
-      color: #ffcc00;
+      color: #0066cc;
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
     }
-    footer {
-      background-color: #003366;
-      color: white;
-      text-align: center;
-      padding: 15px;
+    .contacto {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
     }
   </style>
 </head>
 <body>
   <!-- Primera sección con carrito -->
-  <section class="hero1">
-    <h1>ElectroMarket Holguín</h1>
-    <p>Tecnología y confort para tu hogar</p>
+  <section>
+    <img src="carrito.jpg" alt="Carrito con equipos">
+    <h1>¡Bienvenido a ElectroMarket Holguín!</h1>
+    <p>Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
     <button onclick="window.location.href='tienda.html'">Entrar a la tienda</button>
   </section>
 
-  <!-- Segunda sección con descripción -->
-  <section class="hero2">
-    <h2>🛒 ¡Bienvenido a ElectroMarket Holguín!</h2>
+  <!-- Segunda sección con equipos -->
+  <section>
+    <img src="equipos.jpg" alt="Electrodomésticos">
+    <h2>¿Cómo funciona nuestra tienda?</h2>
     <p>
-      Tu espacio online para descubrir y comprar los mejores electrodomésticos: lavadoras, neveras, refrigeradores, splits, televisores, equipos de música, bicicletas y mucho más.
+      Explora nuestro catálogo de electrodomésticos y equipos, elige el producto que más se adapte a tus necesidades, realiza tu compra con métodos de pago seguros y recibe tu pedido con garantía y respaldo.
     </p>
+    <div class="contacto">
+      Tel: +53 51421460 | Email: marcosdavidim2003@gmail.com | Holguín, Cuba
+    </div>
     <div class="links">
       <a href="privacidad.html">Política y Privacidad</a> |
       <a href="condiciones.html">Términos y Condiciones</a>
     </div>
   </section>
-
-  <footer>
-    Tel: +53 51421460 | Email: marcosdavidim2003@gmail.com | Holguín, Cuba
-  </footer>
 </body>
 </html>
