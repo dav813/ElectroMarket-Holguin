@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ElectroMarket Holguín</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+    section {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      text-align: center;
+      color: white;
+      text-shadow: 1px 1px 3px black;
+      padding-bottom: 40px;
+    }
+    .hero1 {
+      background-image: url('carrito.jpg'); /* primera imagen: carrito con equipos */
+      background-size: cover;
+      background-position: center;
+    }
+    .hero2 {
+      background-image: url('equipos.jpg'); /* segunda imagen: equipos */
+      background-size: cover;
+      background-position: center;
+      justify-content: center;
+      padding: 60px;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004c99;
+    }
+    .links {
+      margin-top: 20px;
+    }
+    .links a {
+      color: #ffcc00;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+    footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Primera sección con carrito -->
+  <section class="hero1">
+    <h1>ElectroMarket Holguín</h1>
+    <p>Tecnología y confort para tu hogar</p>
+    <button onclick="window.location.href='tienda.html'">Entrar a la tienda</button>
+  </section>
 
+  <!-- Segunda sección con descripción -->
+  <section class="hero2">
+    <h2>🛒 ¡Bienvenido a ElectroMarket Holguín!</h2>
+    <p>
+      Tu espacio online para descubrir y comprar los mejores electrodomésticos: lavadoras, neveras, refrigeradores, splits, televisores, equipos de música, bicicletas y mucho más.
+    </p>
+    <div class="links">
+      <a href="privacidad.html">Política y Privacidad</a> |
+      <a href="condiciones.html">Términos y Condiciones</a>
+    </div>
+  </section>
+
+  <footer>
+    Tel: +53 51421460 | Email: marcosdavidim2003@gmail.com | Holguín, Cuba
+  </footer>
+</body>
+</html>
