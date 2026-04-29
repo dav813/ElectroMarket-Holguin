@@ -3,151 +3,144 @@
 <head>
   <meta charset="UTF-8">
   <title>ElectroMarket Holguín</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #e6e6e6;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Cada sección ocupa toda la pantalla */
-    section {
+    body { font-family: Arial, sans-serif; background: #e6e6e6; }
+
+    /* Cada sección = pantalla completa */
+    .pagina {
+      width: 100%;
       height: 100vh;
-      background-color: #e6e6e6;
+      background: #e6e6e6;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
       text-align: center;
+      overflow: hidden;
     }
 
-    .titulo {
-      font-size: 36px;
+    .pagina h1, .pagina h2 {
+      font-size: 32px;
       font-weight: bold;
       color: #000;
-      margin-bottom: 14px;
-      text-shadow: 1px 1px 3px #fff;
+      margin-bottom: 12px;
     }
 
-    .subtitulo {
-      font-size: 22px;
+    .pagina p {
+      font-size: 20px;
       color: #000;
-      margin-bottom: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
 
-    .foto-central {
-      width: 85%;
-      max-width: 420px;
-      max-height: 40vh;
+    .pagina img {
+      width: 80%;
+      max-width: 380px;
+      max-height: 35vh;
       object-fit: contain;
-      border-radius: 16px;
-      margin: 14px 0;
+      border-radius: 14px;
+      margin: 12px 0;
     }
 
-    button {
-      background-color: #0066cc;
+    .pagina button {
+      background: #0066cc;
       color: white;
       border: none;
-      padding: 18px 44px;
-      font-size: 26px;
+      padding: 16px 40px;
+      font-size: 24px;
       border-radius: 8px;
       cursor: pointer;
-      margin-top: 18px;
+      margin-top: 14px;
     }
 
-    button:hover {
-      background-color: #004c99;
-    }
+    .pagina button:hover { background: #004c99; }
 
     .contacto {
-      margin-top: 20px;
-      font-size: 18px;
+      font-size: 16px;
       color: #000;
+      margin-top: 14px;
       line-height: 2;
     }
 
-    .links {
-      margin-top: 10px;
-      font-size: 18px;
-    }
+    .links { margin-top: 8px; font-size: 16px; }
 
     .links a {
       color: #0066cc;
       text-decoration: none;
-      margin: 0 8px;
       font-weight: bold;
+      margin: 0 6px;
     }
 
-    /* Línea divisora entre las dos "páginas" */
-    .separador {
-      width: 80%;
+    /* Línea entre páginas */
+    hr {
       border: none;
       border-top: 2px solid #bbb;
+      width: 80%;
       margin: 0 auto;
     }
 
-    /* Animación */
+    /* Animación scroll */
     .animar {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
     }
 
-    .animar.visible {
+    .animar.ver {
       opacity: 1;
       transform: translateY(0);
     }
+
   </style>
 </head>
 <body>
 
-  <!-- Página 1: Bienvenida -->
-  <section class="caratula">
-    <h1 class="titulo animar">🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
-    <p class="subtitulo animar">✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
-    <img class="foto-central animar" src="carrito.jpg" alt="Carrito de compras">
+  <!-- PÁGINA 1 -->
+  <div class="pagina">
+    <h1 class="animar">🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
+    <p class="animar">✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
+    <img class="animar" src="carrito.jpg" alt="Carrito">
     <button class="animar" onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
-  </section>
+  </div>
 
-  <hr class="separador">
+  <hr>
 
-  <!-- Página 2: Cómo funciona -->
-  <section class="funcionamiento">
-    <h2 class="titulo animar">⚙️ ¿Cómo funciona nuestra tienda?</h2>
-    <img class="foto-central animar" src="equipos.jpg" alt="Equipos electrónicos">
-    <p class="subtitulo animar">
+  <!-- PÁGINA 2 -->
+  <div class="pagina">
+    <h2 class="animar">⚙️ ¿Cómo funciona nuestra tienda?</h2>
+    <img class="animar" src="equipos.jpg" alt="Equipos">
+    <p class="animar">
       🔎 Explora nuestro catálogo de electrodomésticos y equipos.<br>
       ✅ Elige el producto que más se adapte a tus necesidades.<br>
-      💳 Realiza tu compra con métodos de pago seguros y compatibles en Cuba e internacionales.<br>
+      💳 Pago seguro compatible en Cuba e internacionales.<br>
       📦 Recibe tu pedido con garantía y respaldo.
     </p>
     <div class="contacto animar">
-      📞 Tel: +53 51421460 &nbsp;|&nbsp; 📧 marcosdavidim2003@gmail.com &nbsp;|&nbsp; 📍 Holguín, Cuba
+      📞 +53 51421460 &nbsp;|&nbsp; 📧 marcosdavidim2003@gmail.com &nbsp;|&nbsp; 📍 Holguín, Cuba
     </div>
     <div class="links animar">
       🔒 <a href="privacidad.html">Política y Privacidad</a> &nbsp;|&nbsp;
       📑 <a href="condiciones.html">Términos y Condiciones</a>
     </div>
-  </section>
+  </div>
 
   <script>
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          entry.target.classList.add('ver');
         }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
 
-    document.querySelectorAll('.animar').forEach(el => observer.observe(el));
+    document.querySelectorAll('.animar').forEach(function(el) {
+      observer.observe(el);
+    });
   </script>
 
 </body>
