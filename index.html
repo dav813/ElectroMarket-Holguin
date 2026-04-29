@@ -95,6 +95,18 @@
       font-size: 20px;
       color: #000;
     }
+
+    /* Animación de letras */
+    .overlay h1, .overlay h2, .overlay p, button, .contacto, .links {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease-out;
+    }
+
+    .visible h1, .visible h2, .visible p, .visible button, .visible .contacto, .visible .links {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -130,5 +142,18 @@
       </div>
     </div>
   </section>
+
+  <script>
+    // Efecto de letras al cargar y al hacer scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.overlay, .boton, .bottom').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
