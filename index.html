@@ -5,81 +5,74 @@
   <title>ElectroMarket Holguín</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       font-family: Arial, sans-serif;
-      background-color: #e6e6e6; /* gris uniforme */
+      background-color: #e6e6e6;
     }
 
     section {
-      position: relative;
-      min-height: 100vh;
       background-color: #e6e6e6;
-      background-repeat: no-repeat;
-      background-position: center top;
-      background-size: contain; /* mantiene tamaño original de la foto */
-    }
-
-    /* Fondos */
-    .caratula {
-      background-image: url('carrito.jpg');
-    }
-
-    .funcionamiento {
-      background-image: url('equipos.jpg');
-    }
-
-    /* Texto encima de la foto */
-    .overlay {
-      position: absolute;
-      top: 5%; /* primera línea encima de la foto */
-      left: 50%;
-      transform: translateX(-50%);
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
-      color: #000;
-      text-shadow: 1px 1px 3px #fff;
-      width: 90%;
     }
 
-    .overlay h1, .overlay h2 {
-      font-size: 56px; /* letras grandes */
-      margin-bottom: 25px;
+    .titulo {
+      font-size: 38px;
       font-weight: bold;
+      color: #000;
+      margin-bottom: 16px;
+      text-shadow: 1px 1px 3px #fff;
     }
 
-    .overlay p {
-      font-size: 32px; /* párrafo más grande */
-      margin-bottom: 25px;
+    .subtitulo {
+      font-size: 26px;
+      color: #000;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
 
-    /* Botón debajo de la foto */
-    .boton {
-      position: absolute;
-      bottom: 15%; /* debajo de la foto */
-      left: 50%;
-      transform: translateX(-50%);
+    .foto-central {
+      width: 90%;
+      max-width: 480px;
+      border-radius: 16px;
+      margin: 20px 0;
+      display: block;
     }
 
     button {
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 26px 52px;
-      font-size: 30px;
-      border-radius: 5px;
+      padding: 22px 48px;
+      font-size: 28px;
+      border-radius: 8px;
       cursor: pointer;
+      margin-top: 24px;
     }
 
     button:hover {
       background-color: #004c99;
     }
 
-    /* Contacto y enlaces debajo de la foto */
-    .bottom {
-      position: absolute;
-      bottom: 5%;
-      width: 100%;
-      text-align: center;
+    .contacto {
+      margin-top: 28px;
+      font-size: 20px;
+      color: #000;
+      line-height: 1.8;
+    }
+
+    .links {
+      margin-top: 14px;
+      font-size: 20px;
     }
 
     .links a {
@@ -87,73 +80,70 @@
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
-      font-size: 22px;
     }
 
-    .contacto {
-      margin-bottom: 12px;
-      font-size: 22px;
-      color: #000;
+    .separador {
+      width: 80%;
+      border: none;
+      border-top: 2px solid #ccc;
+      margin: 0 auto;
     }
 
-    /* Animación de letras */
-    .overlay h1, .overlay h2, .overlay p, button, .contacto, .links {
+    /* Animación */
+    .animar {
       opacity: 0;
       transform: translateY(30px);
-      transition: all 1s ease-out;
+      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
     }
 
-    .visible h1, .visible h2, .visible p, .visible button, .visible .contacto, .visible .links {
+    .animar.visible {
       opacity: 1;
       transform: translateY(0);
     }
   </style>
 </head>
 <body>
-  <!-- Primera sección -->
+
+  <!-- Primera sección: Bienvenida -->
   <section class="caratula">
-    <div class="overlay">
-      <h1>🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
-      <p>✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
-    </div>
-    <div class="boton">
-      <button onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
-    </div>
+    <h1 class="titulo animar">🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
+    <p class="subtitulo animar">✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
+    <img class="foto-central animar" src="carrito.jpg" alt="Carrito de compras con electrodomésticos">
+    <button class="animar" onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
   </section>
 
-  <!-- Segunda sección -->
+  <hr class="separador">
+
+  <!-- Segunda sección: Cómo funciona -->
   <section class="funcionamiento">
-    <div class="overlay">
-      <h2>⚙️ ¿Cómo funciona nuestra tienda?</h2>
-      <p>
-        🔎 Explora nuestro catálogo de electrodomésticos y equipos. <br>
-        ✅ Elige el producto que más se adapte a tus necesidades. <br>
-        💳 Realiza tu compra con métodos de pago seguros y compatibles en Cuba e internacionales. <br>
-        📦 Recibe tu pedido con garantía y respaldo.
-      </p>
+    <h2 class="titulo animar">⚙️ ¿Cómo funciona nuestra tienda?</h2>
+    <img class="foto-central animar" src="equipos.jpg" alt="Equipos electrónicos">
+    <p class="subtitulo animar">
+      🔎 Explora nuestro catálogo de electrodomésticos y equipos.<br>
+      ✅ Elige el producto que más se adapte a tus necesidades.<br>
+      💳 Realiza tu compra con métodos de pago seguros y compatibles en Cuba e internacionales.<br>
+      📦 Recibe tu pedido con garantía y respaldo.
+    </p>
+    <div class="contacto animar">
+      📞 Tel: +53 51421460 &nbsp;|&nbsp; 📧 marcosdavidim2003@gmail.com &nbsp;|&nbsp; 📍 Holguín, Cuba
     </div>
-    <div class="bottom">
-      <div class="contacto">
-        📞 Tel: +53 51421460 | 📧 Email: marcosdavidim2003@gmail.com | 📍 Holguín, Cuba
-      </div>
-      <div class="links">
-        🔒 <a href="privacidad.html">Política y Privacidad</a> |
-        📑 <a href="condiciones.html">Términos y Condiciones</a>
-      </div>
+    <div class="links animar">
+      🔒 <a href="privacidad.html">Política y Privacidad</a> &nbsp;|&nbsp;
+      📑 <a href="condiciones.html">Términos y Condiciones</a>
     </div>
   </section>
 
   <script>
-    // Efecto de letras al cargar y al hacer scroll
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.2 });
 
-    document.querySelectorAll('.overlay, .boton, .bottom').forEach(el => observer.observe(el));
+    document.querySelectorAll('.animar').forEach(el => observer.observe(el));
   </script>
+
 </body>
 </html>
