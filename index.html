@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #e6e6e6;
+      background-color: #e6e6e6; /* gris uniforme */
       overflow-x: hidden;
     }
 
@@ -16,8 +16,9 @@
       position: relative;
       min-height: 100vh;
       background-color: #e6e6e6;
-      background-size: cover;
-      background-position: center;
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: contain; /* mantiene el tamaño original de la foto */
     }
 
     /* Fondos */
@@ -29,10 +30,10 @@
       background-image: url('equipos.jpg');
     }
 
-    /* Texto en posición absoluta */
+    /* Texto encima de la foto */
     .overlay {
       position: absolute;
-      top: 25%; /* Ajusta según la posición original del texto */
+      top: 10%; /* encima de la foto */
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -42,34 +43,42 @@
     }
 
     .overlay h1, .overlay h2 {
-      font-size: 32px; /* más pequeño que el texto incrustado */
+      font-size: 48px; /* mucho más grande */
       margin-bottom: 20px;
       font-weight: bold;
     }
 
     .overlay p {
-      font-size: 20px;
+      font-size: 26px;
       margin-bottom: 20px;
+    }
+
+    /* Botón debajo de la foto */
+    .boton {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     button {
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 16px 32px;
-      font-size: 20px;
+      padding: 20px 40px;
+      font-size: 24px;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 15px;
     }
 
     button:hover {
       background-color: #004c99;
     }
 
+    /* Contacto y enlaces debajo de la foto */
     .bottom {
       position: absolute;
-      bottom: 20px;
+      bottom: 5%;
       width: 100%;
       text-align: center;
     }
@@ -79,23 +88,23 @@
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 18px;
     }
 
     .contacto {
       margin-bottom: 10px;
-      font-size: 16px;
+      font-size: 18px;
       color: #000;
     }
 
     /* Animación de letras */
-    .overlay h1, .overlay h2, .overlay p, button {
+    .overlay h1, .overlay h2, .overlay p {
       opacity: 0;
       transform: translateY(30px);
       transition: all 1s ease-out;
     }
 
-    .visible h1, .visible h2, .visible p, .visible button {
+    .visible h1, .visible h2, .visible p {
       opacity: 1;
       transform: translateY(0);
     }
@@ -107,6 +116,8 @@
     <div class="overlay">
       <h1>🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
       <p>✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
+    </div>
+    <div class="boton">
       <button onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
     </div>
   </section>
