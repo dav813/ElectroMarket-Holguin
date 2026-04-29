@@ -9,7 +9,6 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #e6e6e6; /* gris uniforme */
-      overflow-x: hidden;
     }
 
     section {
@@ -18,7 +17,7 @@
       background-color: #e6e6e6;
       background-repeat: no-repeat;
       background-position: center top;
-      background-size: contain; /* mantiene el tamaño original de la foto */
+      background-size: contain; /* mantiene tamaño original de la foto */
     }
 
     /* Fondos */
@@ -33,7 +32,7 @@
     /* Texto encima de la foto */
     .overlay {
       position: absolute;
-      top: 10%; /* encima de la foto */
+      top: 5%; /* encima de la foto */
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -43,20 +42,20 @@
     }
 
     .overlay h1, .overlay h2 {
-      font-size: 48px; /* mucho más grande */
+      font-size: 54px; /* letras grandes */
       margin-bottom: 20px;
       font-weight: bold;
     }
 
     .overlay p {
-      font-size: 26px;
+      font-size: 30px;
       margin-bottom: 20px;
     }
 
     /* Botón debajo de la foto */
     .boton {
       position: absolute;
-      bottom: 20%;
+      bottom: 15%; /* debajo de la foto */
       left: 50%;
       transform: translateX(-50%);
     }
@@ -65,8 +64,8 @@
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 20px 40px;
-      font-size: 24px;
+      padding: 24px 48px;
+      font-size: 28px;
       border-radius: 5px;
       cursor: pointer;
     }
@@ -88,25 +87,13 @@
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .contacto {
       margin-bottom: 10px;
-      font-size: 18px;
+      font-size: 20px;
       color: #000;
-    }
-
-    /* Animación de letras */
-    .overlay h1, .overlay h2, .overlay p {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 1s ease-out;
-    }
-
-    .visible h1, .visible h2, .visible p {
-      opacity: 1;
-      transform: translateY(0);
     }
   </style>
 </head>
@@ -143,18 +130,5 @@
       </div>
     </div>
   </section>
-
-  <script>
-    // Efecto de letras al cargar y al hacer scroll
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.overlay').forEach(el => observer.observe(el));
-  </script>
 </body>
 </html>
