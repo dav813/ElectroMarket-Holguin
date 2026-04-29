@@ -12,12 +12,6 @@
       overflow-x: hidden;
     }
 
-    /* Animación de aparición */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     section {
       position: relative;
       min-height: 100vh;
@@ -47,7 +41,6 @@
       color: #000;
       text-shadow: 1px 1px 3px #fff;
       width: 90%;
-      animation: fadeIn 1.5s ease-out;
     }
 
     .overlay h1, .overlay h2 {
@@ -70,7 +63,6 @@
       border-radius: 5px;
       cursor: pointer;
       margin-top: 15px;
-      animation: fadeIn 2s ease-out;
     }
 
     button:hover {
@@ -98,7 +90,7 @@
       color: #000;
     }
 
-    /* Efecto de letras al hacer scroll */
+    /* Animación de letras */
     .overlay h1, .overlay h2, .overlay p, button {
       opacity: 0;
       transform: translateY(30px);
@@ -144,7 +136,7 @@
   </section>
 
   <script>
-    // Efecto de letras al hacer scroll
+    // Efecto de letras al cargar y al hacer scroll
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
