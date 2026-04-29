@@ -8,51 +8,47 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #e6e6e6; /* gris uniforme */
+      background-color: #e6e6e6;
       overflow-x: hidden;
     }
 
     section {
       position: relative;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
       background-color: #e6e6e6;
+      background-size: cover;
+      background-position: center;
     }
 
     /* Fondos */
     .caratula {
       background-image: url('caratula.jpg');
-      background-size: cover;
-      background-position: center;
     }
 
     .funcionamiento {
       background-image: url('funcionamiento.jpg');
-      background-size: cover;
-      background-position: center;
     }
 
+    /* Texto en posición absoluta */
     .overlay {
+      position: absolute;
+      top: 25%; /* Ajusta según la posición del texto en la foto */
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
       color: #000;
       text-shadow: 1px 1px 3px #fff;
       width: 90%;
-      position: relative;
-      top: -40px; /* Ajuste para coincidir con la posición del texto en la foto */
     }
 
     .overlay h1, .overlay h2 {
-      font-size: 36px; /* un poco más pequeño que el texto del fondo */
+      font-size: 34px; /* más pequeño que el texto incrustado */
       margin-bottom: 20px;
       font-weight: bold;
     }
 
     .overlay p {
-      font-size: 22px;
+      font-size: 20px;
       margin-bottom: 20px;
     }
 
@@ -60,8 +56,8 @@
       background-color: #0066cc;
       color: white;
       border: none;
-      padding: 18px 36px;
-      font-size: 22px;
+      padding: 16px 32px;
+      font-size: 20px;
       border-radius: 5px;
       cursor: pointer;
       margin-top: 15px;
@@ -83,12 +79,12 @@
       text-decoration: none;
       margin: 0 10px;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .contacto {
       margin-bottom: 10px;
-      font-size: 18px;
+      font-size: 16px;
       color: #000;
     }
 
