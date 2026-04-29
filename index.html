@@ -8,87 +8,158 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body { font-family: Arial, sans-serif; background: #e6e6e6; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #e6e6e6;
+    }
 
     /* Cada sección = pantalla completa */
     .pagina {
       width: 100%;
       height: 100vh;
-      background: #e6e6e6;
+      background: linear-gradient(160deg, #f0f4ff 0%, #e6e6e6 60%, #dce3f0 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px;
       text-align: center;
       overflow: hidden;
     }
 
-    .pagina h1, .pagina h2 {
-      font-size: 32px;
-      font-weight: bold;
-      color: #000;
-      margin-bottom: 12px;
+    /* Página 2 con fondo ligeramente diferente */
+    .pagina2 {
+      background: linear-gradient(160deg, #dce3f0 0%, #e6e6e6 60%, #f0f4ff 100%);
+    }
+
+    .pagina h1 {
+      font-size: 42px;
+      font-weight: 900;
+      color: #111;
+      margin-bottom: 14px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .pagina h2 {
+      font-size: 38px;
+      font-weight: 900;
+      color: #111;
+      margin-bottom: 14px;
+      line-height: 1.2;
     }
 
     .pagina p {
-      font-size: 20px;
-      color: #000;
-      line-height: 1.6;
-      margin-bottom: 12px;
+      font-size: 22px;
+      color: #333;
+      line-height: 1.8;
+      margin-bottom: 10px;
+      max-width: 600px;
+    }
+
+    .resaltado {
+      color: #0055bb;
     }
 
     .pagina img {
-      width: 80%;
-      max-width: 380px;
-      max-height: 35vh;
+      width: 88%;
+      max-width: 440px;
+      max-height: 38vh;
       object-fit: contain;
-      border-radius: 14px;
-      margin: 12px 0;
+      border-radius: 20px;
+      margin: 16px 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     }
 
     .pagina button {
-      background: #0066cc;
+      background: linear-gradient(135deg, #0066cc, #0044aa);
       color: white;
       border: none;
-      padding: 16px 40px;
-      font-size: 24px;
-      border-radius: 8px;
+      padding: 18px 50px;
+      font-size: 26px;
+      font-weight: bold;
+      border-radius: 50px;
       cursor: pointer;
-      margin-top: 14px;
+      margin-top: 18px;
+      box-shadow: 0 6px 20px rgba(0,102,204,0.4);
+      letter-spacing: 0.5px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .pagina button:hover { background: #004c99; }
+    .pagina button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0,102,204,0.5);
+    }
+
+    .pagina button:active {
+      transform: translateY(0px);
+    }
+
+    /* Tarjeta de pasos */
+    .pasos {
+      background: rgba(255,255,255,0.5);
+      border-radius: 18px;
+      padding: 18px 24px;
+      margin: 10px 0;
+      max-width: 560px;
+      width: 90%;
+      font-size: 20px;
+      color: #222;
+      line-height: 2;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      backdrop-filter: blur(4px);
+    }
 
     .contacto {
-      font-size: 16px;
-      color: #000;
-      margin-top: 14px;
+      font-size: 17px;
+      color: #444;
+      margin-top: 16px;
       line-height: 2;
     }
 
-    .links { margin-top: 8px; font-size: 16px; }
-
-    .links a {
-      color: #0066cc;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 0 6px;
+    .links {
+      margin-top: 8px;
+      font-size: 17px;
     }
 
-    /* Línea entre páginas */
-    hr {
+    .links a {
+      color: #0055bb;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 8px;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .links a:hover {
+      border-bottom: 2px solid #0055bb;
+    }
+
+    /* Divisor elegante */
+    .divisor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 10%;
+    }
+
+    .divisor hr {
+      flex: 1;
       border: none;
-      border-top: 2px solid #bbb;
-      width: 80%;
-      margin: 0 auto;
+      border-top: 2px solid #b0b8cc;
+    }
+
+    .divisor span {
+      font-size: 22px;
+      color: #0066cc;
     }
 
     /* Animación scroll */
     .animar {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 1s ease, transform 1s ease;
+      transform: translateY(32px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
     }
 
     .animar.ver {
@@ -96,32 +167,41 @@
       transform: translateY(0);
     }
 
+    /* Retrasos para que aparezcan uno a uno */
+    .animar:nth-child(2) { transition-delay: 0.15s; }
+    .animar:nth-child(3) { transition-delay: 0.30s; }
+    .animar:nth-child(4) { transition-delay: 0.45s; }
+    .animar:nth-child(5) { transition-delay: 0.60s; }
+
   </style>
 </head>
 <body>
 
   <!-- PÁGINA 1 -->
   <div class="pagina">
-    <h1 class="animar">🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
+    <h1 class="animar">🛒 ¡Bienvenido a<br><span class="resaltado">ElectroMarket Holguín</span>!</h1>
     <p class="animar">✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
     <img class="animar" src="carrito.jpg" alt="Carrito">
     <button class="animar" onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
   </div>
 
-  <hr>
+  <!-- Divisor elegante -->
+  <div class="divisor">
+    <hr><span>⚡</span><hr>
+  </div>
 
   <!-- PÁGINA 2 -->
-  <div class="pagina">
-    <h2 class="animar">⚙️ ¿Cómo funciona nuestra tienda?</h2>
+  <div class="pagina pagina2">
+    <h2 class="animar">⚙️ ¿Cómo funciona<br>nuestra tienda?</h2>
     <img class="animar" src="equipos.jpg" alt="Equipos">
-    <p class="animar">
-      🔎 Explora nuestro catálogo de electrodomésticos y equipos.<br>
-      ✅ Elige el producto que más se adapte a tus necesidades.<br>
-      💳 Pago seguro compatible en Cuba e internacionales.<br>
-      📦 Recibe tu pedido con garantía y respaldo.
-    </p>
+    <div class="pasos animar">
+      🔎 Explora nuestro catálogo de electrodomésticos.<br>
+      ✅ Elige el producto ideal para vos.<br>
+      💳 Pago seguro en Cuba e internacional.<br>
+      📦 Recibí tu pedido con garantía.
+    </div>
     <div class="contacto animar">
-      📞 +53 51421460 &nbsp;|&nbsp; 📧 marcosdavidim2003@gmail.com &nbsp;|&nbsp; 📍 Holguín, Cuba
+      📞 +53 51421460 &nbsp;|&nbsp; 📧 marcosdavidim2003@gmail.com<br>📍 Holguín, Cuba
     </div>
     <div class="links animar">
       🔒 <a href="privacidad.html">Política y Privacidad</a> &nbsp;|&nbsp;
