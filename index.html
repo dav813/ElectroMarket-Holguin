@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #e6e6e6; /* gris uniforme */
       overflow-x: hidden;
     }
 
@@ -27,19 +27,18 @@
       align-items: center;
       text-align: center;
       overflow: hidden;
+      background-color: #e6e6e6;
     }
 
-    /* Fondo parallax para el carrito */
-    .parallax {
-      background-image: url('carrito.jpg');
-      background-attachment: fixed;
+    /* Fondos */
+    .caratula {
+      background-image: url('caratula.jpg');
       background-size: cover;
       background-position: center;
     }
 
-    /* Fondo fijo para equipos */
-    .fixed-bg {
-      background-image: url('equipos.jpg');
+    .funcionamiento {
+      background-image: url('funcionamiento.jpg');
       background-size: cover;
       background-position: center;
     }
@@ -98,11 +97,23 @@
       font-size: 18px;
       color: #000;
     }
+
+    /* Efecto de letras al hacer scroll */
+    .overlay h1, .overlay h2, .overlay p, button {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease-out;
+    }
+
+    .visible h1, .visible h2, .visible p, .visible button {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
-  <!-- Primera sección con carrito (fondo parallax) -->
-  <section class="parallax">
+  <!-- Primera sección -->
+  <section class="caratula">
     <div class="overlay">
       <h1>🛒 ¡Bienvenido a <span style="color:#0066cc;">ElectroMarket Holguín</span>!</h1>
       <p>✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
@@ -110,8 +121,8 @@
     </div>
   </section>
 
-  <!-- Segunda sección con equipos (fondo fijo + efecto letras) -->
-  <section class="fixed-bg">
+  <!-- Segunda sección -->
+  <section class="funcionamiento">
     <div class="overlay">
       <h2>⚙️ ¿Cómo funciona nuestra tienda?</h2>
       <p>
@@ -131,5 +142,18 @@
       </div>
     </div>
   </section>
+
+  <script>
+    // Efecto de letras al hacer scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.overlay').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
