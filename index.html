@@ -13,21 +13,18 @@
       background: #e6e6e6;
     }
 
-    /* Cada sección = pantalla completa */
     .pagina {
       width: 100%;
-      height: 100vh;
+      min-height: 100dvh;
       background: linear-gradient(160deg, #f0f4ff 0%, #e6e6e6 60%, #dce3f0 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 30px 20px;
       text-align: center;
-      overflow: hidden;
     }
 
-    /* Página 2 con fondo ligeramente diferente */
     .pagina2 {
       background: linear-gradient(160deg, #dce3f0 0%, #e6e6e6 60%, #f0f4ff 100%);
     }
@@ -68,7 +65,7 @@
       object-fit: contain;
       border-radius: 20px;
       margin: 16px 0;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      mix-blend-mode: multiply;
     }
 
     .pagina button {
@@ -95,7 +92,6 @@
       transform: translateY(0px);
     }
 
-    /* Tarjeta de pasos */
     .pasos {
       background: rgba(255,255,255,0.5);
       border-radius: 18px;
@@ -135,7 +131,6 @@
       border-bottom: 2px solid #0055bb;
     }
 
-    /* Divisor elegante */
     .divisor {
       display: flex;
       align-items: center;
@@ -155,7 +150,6 @@
       color: #0066cc;
     }
 
-    /* Animación scroll */
     .animar {
       opacity: 0;
       transform: translateY(32px);
@@ -167,11 +161,28 @@
       transform: translateY(0);
     }
 
-    /* Retrasos para que aparezcan uno a uno */
     .animar:nth-child(2) { transition-delay: 0.15s; }
     .animar:nth-child(3) { transition-delay: 0.30s; }
     .animar:nth-child(4) { transition-delay: 0.45s; }
     .animar:nth-child(5) { transition-delay: 0.60s; }
+
+    @media (max-width: 400px) {
+      .pagina h1 { font-size: 30px; }
+      .pagina h2 { font-size: 26px; }
+      .pagina p  { font-size: 17px; }
+      .pagina button { font-size: 20px; padding: 14px 36px; }
+      .pasos { font-size: 16px; }
+      .contacto { font-size: 15px; }
+      .links { font-size: 15px; }
+    }
+
+    @media (max-width: 320px) {
+      .pagina h1 { font-size: 26px; }
+      .pagina h2 { font-size: 22px; }
+      .pagina p  { font-size: 15px; }
+      .pagina button { font-size: 18px; padding: 12px 28px; }
+      .pasos { font-size: 14px; }
+    }
 
   </style>
 </head>
