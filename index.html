@@ -29,6 +29,18 @@
       background: linear-gradient(160deg, #dce3f0 0%, #e6e6e6 60%, #f0f4ff 100%);
     }
 
+    .logo-marca {
+      width: 86px;
+      height: 86px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+      border: 3px solid #c8a84b;
+      box-shadow: 0 0 0 4px rgba(200,168,75,0.18), 0 6px 24px rgba(0,0,0,0.22);
+      margin-bottom: 16px;
+      display: block;
+    }
+
     .pagina h1 {
       font-size: 42px;
       font-weight: 900;
@@ -58,7 +70,7 @@
       color: #0055bb;
     }
 
-    .pagina img {
+    .pagina img.img-deco {
       width: 88%;
       max-width: 440px;
       max-height: 38vh;
@@ -90,6 +102,32 @@
 
     .pagina button:active {
       transform: translateY(0px);
+    }
+
+    .flecha-abajo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 22px;
+      gap: 4px;
+      animation: rebote 1.6s ease-in-out infinite;
+    }
+
+    .flecha-abajo span {
+      font-size: 13px;
+      color: #0055bb;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .flecha-abajo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    @keyframes rebote {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(8px); }
     }
 
     .pasos {
@@ -165,6 +203,8 @@
     .animar:nth-child(3) { transition-delay: 0.30s; }
     .animar:nth-child(4) { transition-delay: 0.45s; }
     .animar:nth-child(5) { transition-delay: 0.60s; }
+    .animar:nth-child(6) { transition-delay: 0.75s; }
+    .animar:nth-child(7) { transition-delay: 0.90s; }
 
     @media (max-width: 400px) {
       .pagina h1 { font-size: 30px; }
@@ -174,6 +214,7 @@
       .pasos { font-size: 16px; }
       .contacto { font-size: 15px; }
       .links { font-size: 15px; }
+      .logo-marca { width: 70px; height: 70px; }
     }
 
     @media (max-width: 320px) {
@@ -182,6 +223,7 @@
       .pagina p  { font-size: 15px; }
       .pagina button { font-size: 18px; padding: 12px 28px; }
       .pasos { font-size: 14px; }
+      .logo-marca { width: 60px; height: 60px; }
     }
 
   </style>
@@ -190,13 +232,27 @@
 
   <!-- PÁGINA 1 -->
   <div class="pagina">
-    <h1 class="animar">🛒 ¡Bienvenido a<br><span class="resaltado">ElectroMarket Holguín</span>!</h1>
+
+    <img class="animar logo-marca" src="logo.jpg" alt="Logo ElectroMarket Holguín">
+
+    <h1 class="animar">¡Bienvenido a<br><span class="resaltado">ElectroMarket Holguín</span>!</h1>
+
     <p class="animar">✨ Tu espacio online para descubrir y comprar los mejores electrodomésticos con confianza y comodidad.</p>
-    <img class="animar" src="carrito.jpg" alt="Carrito">
+
+    <img class="animar img-deco" src="carrito.jpg" alt="Carrito de compras">
+
     <button class="animar" onclick="window.location.href='tienda.html'">Entrar a la tienda 🚀</button>
+
+    <div class="flecha-abajo animar">
+      <span>Ver más</span>
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="6,12 16,22 26,12" stroke="#0055bb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
   </div>
 
-  <!-- Divisor elegante -->
+  <!-- Divisor -->
   <div class="divisor">
     <hr><span>⚡</span><hr>
   </div>
@@ -204,7 +260,7 @@
   <!-- PÁGINA 2 -->
   <div class="pagina pagina2">
     <h2 class="animar">⚙️ ¿Cómo funciona<br>nuestra tienda?</h2>
-    <img class="animar" src="equipos.jpg" alt="Equipos">
+    <img class="animar img-deco" src="equipos.jpg" alt="Equipos">
     <div class="pasos animar">
       🔎 Explora nuestro catálogo de electrodomésticos.<br>
       ✅ Elige el producto ideal para vos.<br>
