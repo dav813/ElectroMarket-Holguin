@@ -2,46 +2,298 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Términos y Condiciones</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Términos y Condiciones – ElectroMarket Holguín</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-image: url('fondo.jpg'); /* fondo geométrico */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: white;
+      font-family: 'Arial', sans-serif;
+      min-height: 100dvh;
+      padding-top: 62px;
+      color: #222;
+      background-color: #eef2fb;
+      background-image:
+        linear-gradient(135deg, rgba(0,68,170,0.06) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(0,68,170,0.06) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(0,68,170,0.06) 25%, transparent 25%),
+        linear-gradient(45deg,  rgba(0,68,170,0.06) 25%, transparent 25%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 0, 20px -20px, 0 20px;
     }
+
+    /* HEADER FIJO */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: #ffffff;
+      border-bottom: 2px solid #c8a84b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    }
+
+    .header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #c8a84b;
+      flex-shrink: 0;
+    }
+
+    .header-nombre {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .header-nombre strong {
+      font-size: 15px;
+      font-weight: 900;
+      color: #0044aa;
+    }
+
+    .header-nombre span {
+      font-size: 11px;
+      color: #888;
+      font-weight: 500;
+    }
+
+    /* CONTENIDO */
     .contenido {
-      padding: 60px 20px;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 36px 22px 60px;
     }
-    h1 {
-      font-size: 40px;
+
+    /* BOTÓN VOLVER */
+    .btn-volver {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ffffff;
+      color: #0044aa;
+      border: 2px solid #0044aa;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 28px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-volver:hover {
+      background: #0044aa;
+      color: #ffffff;
+    }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #0066cc, #0044aa);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    /* TÍTULO */
+    .titulo-pagina {
+      font-size: 32px;
+      font-weight: 900;
+      color: #0044aa;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .subtitulo {
+      font-size: 15px;
+      color: #888;
       margin-bottom: 30px;
-      background: linear-gradient(90deg, #ff6a00, #ee0979);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
-    p {
-      font-size: 22px;
-      line-height: 1.6;
-      text-shadow: 1px 1px 3px black;
+
+    /* LÍNEA DORADA */
+    .linea-dorada {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #c8a84b, #f0d080);
+      border-radius: 4px;
+      margin-bottom: 28px;
     }
+
+    /* SECCIONES */
+    .seccion {
+      background: rgba(255,255,255,0.85);
+      border-radius: 18px;
+      padding: 22px 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 18px rgba(0,68,170,0.08);
+      border-left: 4px solid #0044aa;
+    }
+
+    .seccion h2 {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0044aa;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seccion p {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    .seccion ul {
+      margin-top: 8px;
+      padding-left: 20px;
+    }
+
+    .seccion ul li {
+      font-size: 15px;
+      color: #333;
+      line-height: 2;
+    }
+
+    /* PIE */
+    .pie {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 13px;
+      color: #999;
+      line-height: 2;
+    }
+
+    .pie a {
+      color: #0055bb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 400px) {
+      .titulo-pagina { font-size: 26px; }
+      .seccion h2 { font-size: 16px; }
+      .seccion p, .seccion ul li { font-size: 14px; }
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- HEADER FIJO -->
+  <header class="header">
+    <img src="logo.jpg" alt="Logo ElectroMarket">
+    <div class="header-nombre">
+      <strong>ElectroMarket Holguín</strong>
+      <span>Electrodomésticos de confianza</span>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
   <div class="contenido">
-    <h1>📑 Términos y Condiciones</h1>
-    <p>
-      💰 Al utilizar ElectroMarket Holguín aceptas nuestros términos de servicio:  
-      📊 Los precios pueden variar según disponibilidad y mercado.  
-      ⏱️ Los tiempos de entrega dependen de la ubicación y el producto.  
-      💳 Los pagos deben realizarse mediante métodos seguros y autorizados.  
-      🔄 Nos reservamos el derecho de actualizar estas condiciones en cualquier momento.
-    </p>
+
+    <a class="btn-volver" href="index.html">← Volver al inicio</a>
+
+    <div class="badge">DOCUMENTO LEGAL</div>
+    <h1 class="titulo-pagina">📑 Términos y Condiciones</h1>
+    <p class="subtitulo">Última actualización: 2025 · ElectroMarket Holguín</p>
+    <div class="linea-dorada"></div>
+
+    <div class="seccion">
+      <h2>📌 Aceptación de los términos</h2>
+      <p>Al acceder y utilizar ElectroMarket Holguín, aceptas cumplir estos Términos y Condiciones. Si no estás de acuerdo con alguno de ellos, te pedimos que no utilices nuestros servicios.</p>
+    </div>
+
+    <div class="seccion">
+      <h2>🛒 Proceso de compra</h2>
+      <p>Para realizar una compra en nuestra tienda debes:</p>
+      <ul>
+        <li>Seleccionar el producto deseado del catálogo</li>
+        <li>Contactarnos por los medios indicados</li>
+        <li>Confirmar disponibilidad y precio final</li>
+        <li>Realizar el pago acordado para confirmar el pedido</li>
+      </ul>
+    </div>
+
+    <div class="seccion">
+      <h2>💳 Precios y pagos</h2>
+      <p>Todos los precios mostrados están sujetos a disponibilidad. Aceptamos:</p>
+      <ul>
+        <li>Pago en efectivo (Cuba)</li>
+        <li>Transferencias nacionales e internacionales</li>
+        <li>Otras formas de pago acordadas previamente</li>
+      </ul>
+      <p style="margin-top:10px;">Los precios pueden variar sin previo aviso según disponibilidad del mercado.</p>
+    </div>
+
+    <div class="seccion">
+      <h2>📦 Envíos y entregas</h2>
+      <p>Las condiciones de entrega son las siguientes:</p>
+      <ul>
+        <li>Los tiempos de entrega se coordinarán directamente con el cliente</li>
+        <li>El comprador es responsable de proporcionar una dirección correcta</li>
+        <li>ElectroMarket Holguín no se responsabiliza por retrasos causados por terceros</li>
+        <li>Se notificará al cliente en cada etapa del proceso de entrega</li>
+      </ul>
+    </div>
+
+    <div class="seccion">
+      <h2>🔄 Devoluciones y garantías</h2>
+      <p>Nuestras condiciones de devolución son:</p>
+      <ul>
+        <li>Se aceptan devoluciones por defectos de fábrica comprobados</li>
+        <li>El cliente debe notificar cualquier problema en un plazo de 48 horas tras recibir el producto</li>
+        <li>Los productos deben estar en su estado original para aplicar la devolución</li>
+        <li>No se aceptan devoluciones por cambio de opinión</li>
+      </ul>
+    </div>
+
+    <div class="seccion">
+      <h2>⚠️ Limitación de responsabilidad</h2>
+      <p>ElectroMarket Holguín no se hace responsable por:</p>
+      <ul>
+        <li>Uso inadecuado de los productos adquiridos</li>
+        <li>Daños causados por instalación incorrecta</li>
+        <li>Pérdidas indirectas derivadas del uso de nuestros productos</li>
+      </ul>
+    </div>
+
+    <div class="seccion">
+      <h2>📝 Modificaciones</h2>
+      <p>ElectroMarket Holguín se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios entrarán en vigor desde su publicación en esta página. Recomendamos revisarlos periódicamente.</p>
+    </div>
+
+    <div class="seccion">
+      <h2>📞 Contacto</h2>
+      <p>
+        Para cualquier consulta sobre estos términos contáctanos:<br><br>
+        📧 marcosdavidim2003@gmail.com<br>
+        📞 +53 51421460<br>
+        📍 Holguín, Cuba
+      </p>
+    </div>
+
+    <div class="pie">
+      © 2025 ElectroMarket Holguín · Todos los derechos reservados<br>
+      <a href="privacidad.html">🔒 Política de Privacidad</a>
+    </div>
+
   </div>
+
 </body>
 </html>
