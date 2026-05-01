@@ -33,7 +33,7 @@
     <input type="text" id="usuario" placeholder="Escribe tu usuario">
     <label for="clave">Contraseña</label>
     <input type="password" id="clave" placeholder="Escribe tu contraseña">
-    <button id="btnEntrar">Entrar</button>
+    <button onclick="validarLogin()">Entrar</button>
   </div>
 
   <!-- Panel oculto -->
@@ -94,10 +94,10 @@
   </div>
 
   <script>
-    // Login corregido
-    document.getElementById("btnEntrar").addEventListener("click", function() {
-      const user = document.getElementById('usuario').value.trim();
-      const pass = document.getElementById('clave').value.trim();
+    // Login universal
+    function validarLogin() {
+      var user = document.getElementById('usuario').value.trim();
+      var pass = document.getElementById('clave').value.trim();
 
       if(user === "Marcos" && pass === "Marcos*2026") {
         document.getElementById('login').style.display = "none";
@@ -105,40 +105,40 @@
       } else {
         alert("Usuario o contraseña incorrectos");
       }
-    });
+    }
 
     // Generador de ID automático
-    let contadorID = 1;
+    var contadorID = 1;
     function generarID() {
       return "P" + String(contadorID++).padStart(3, '0');
     }
 
     // Lista de productos
-    const productos = [];
+    var productos = [];
 
     // Manejo de productos
-    const form = document.getElementById('formProducto');
-    const tabla = document.getElementById('tablaProductos');
+    var form = document.getElementById('formProducto');
+    var tabla = document.getElementById('tablaProductos');
 
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const id = generarID();
-      const nombre = document.getElementById('nombre').value;
-      const precio = document.getElementById('precio').value;
-      const imagen = document.getElementById('imagen').value;
-      const descCorta = document.getElementById('descCorta').value;
-      const descLarga = document.getElementById('descLarga').value;
-      const categoria = document.getElementById('categoria').value;
-      const cantInicial = parseInt(document.getElementById('cantInicial').value);
-      const cantDisponible = parseInt(document.getElementById('cantDisponible').value);
-      const rebaja = document.getElementById('rebaja').value || '0';
-      const diasRebaja = document.getElementById('diasRebaja').value || '0';
+      var id = generarID();
+      var nombre = document.getElementById('nombre').value;
+      var precio = document.getElementById('precio').value;
+      var imagen = document.getElementById('imagen').value;
+      var descCorta = document.getElementById('descCorta').value;
+      var descLarga = document.getElementById('descLarga').value;
+      var categoria = document.getElementById('categoria').value;
+      var cantInicial = parseInt(document.getElementById('cantInicial').value);
+      var cantDisponible = parseInt(document.getElementById('cantDisponible').value);
+      var rebaja = document.getElementById('rebaja').value || '0';
+      var diasRebaja = document.getElementById('diasRebaja').value || '0';
 
-      const producto = { id, nombre, precio, imagen, descCorta, descLarga, categoria, cantInicial, cantDisponible, rebaja, diasRebaja };
+      var producto = { id, nombre, precio, imagen, descCorta, descLarga, categoria, cantInicial, cantDisponible, rebaja, diasRebaja };
       productos.push(producto);
 
-      const fila = document.createElement('tr');
+      var fila = document.createElement('tr');
       fila.innerHTML = `
         <td>${id}</td>
         <td>${nombre}</td>
@@ -165,7 +165,6 @@
     });
 
     // Descargar productos.json
-    document.getElementById('descargarBtn').addEventListener('click', () => {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(productos, null, 2));
-      const dlAnchor = document.createElement('a');
-      dlAnchor.set
+    document.getElementById('descargarBtn').addEventListener('click', function() {
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(productos, null, 2));
+      var dlAnchor = document.createElement('a');
