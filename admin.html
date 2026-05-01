@@ -5,206 +5,171 @@
   <title>Panel de Administración - ElectroMarket Holguín</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f4f6f9;
-      color: #333;
-    }
-
-    header {
-      background: #0066cc;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 26px;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .contenedor {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: #0066cc;
-      font-size: 24px;
-      border-bottom: 2px solid #0066cc;
-      padding-bottom: 8px;
-    }
-
-    form {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 40px;
-    }
-
-    form label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-      color: #444;
-    }
-
-    form input, form textarea, form select {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 18px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    form button {
-      background: linear-gradient(135deg, #0066cc, #0044aa);
-      color: white;
-      border: none;
-      padding: 14px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    form button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,102,204,0.4);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    table th, table td {
-      padding: 14px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    table th {
-      background: #0066cc;
-      color: white;
-      font-size: 16px;
-    }
-
-    table tr:hover {
-      background: #f0f8ff;
-    }
-
-    .acciones button {
-      margin-right: 8px;
-      padding: 6px 12px;
-      font-size: 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .editar { background: #ffc107; color: #111; }
-    .eliminar { background: #dc3545; color: white; }
-    .activar { background: #28a745; color: white; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #333; }
+    header { background: #0066cc; color: white; padding: 20px; text-align: center; font-size: 26px; font-weight: bold; }
+    .contenedor { max-width: 1200px; margin: 30px auto; padding: 20px; }
+    h2 { margin-bottom: 20px; color: #0066cc; font-size: 24px; border-bottom: 2px solid #0066cc; padding-bottom: 8px; }
+    form { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 40px; }
+    form label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+    form input, form textarea, form select { width: 100%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+    form button { background: linear-gradient(135deg, #0066cc, #0044aa); color: white; border: none; padding: 14px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+    form button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,102,204,0.4); }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    table th, table td { padding: 14px; text-align: center; border-bottom: 1px solid #ddd; }
+    table th { background: #0066cc; color: white; font-size: 16px; }
+    .agotado { background: #dc3545; color: white; }
+    .pocos { background: #ffc107; color: black; }
+    .normal { background: #28a745; color: white; }
+    .sinventas { background: #f8f9fa; color: black; }
+    #descargarBtn { margin-top: 20px; background: #28a745; }
   </style>
 </head>
 <body>
 
-  <header>⚙️ Panel de Administración - ElectroMarket Holguín</header>
+  <!-- Login -->
+  <div id="login" style="text-align:center; margin-top:100px;">
+    <h2>Acceso al Administrador</h2>
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" placeholder="Escribe tu usuario">
+    <label for="clave">Contraseña</label>
+    <input type="password" id="clave" placeholder="Escribe tu contraseña">
+    <button onclick="validarLogin()">Entrar</button>
+  </div>
 
-  <div class="contenedor">
-    <!-- Formulario para agregar productos -->
-    <h2>Agregar nuevo producto</h2>
-    <form id="formProducto">
-      <label>Nombre del producto</label>
-      <input type="text" id="nombre" required>
+  <!-- Panel oculto -->
+  <div id="panel" style="display:none;">
+    <header>⚙️ Panel de Administración - ElectroMarket Holguín</header>
+    <div class="contenedor">
+      <h2>Agregar nuevo producto</h2>
+      <form id="formProducto">
+        <label>Nombre del producto</label>
+        <input type="text" id="nombre" required>
+        <label>Precio</label>
+        <input type="number" id="precio" required>
+        <label>Imagen principal (URL)</label>
+        <input type="text" id="imagen">
+        <label>Descripción corta</label>
+        <input type="text" id="descCorta" required>
+        <label>Descripción larga</label>
+        <textarea id="descLarga" rows="4" required></textarea>
+        <label>Categoría</label>
+        <select id="categoria" required>
+          <option value="">Seleccione una categoría</option>
+          <option value="Electrodomésticos">Electrodomésticos</option>
+          <option value="Cocina">Cocina</option>
+          <option value="Audio">Audio</option>
+          <option value="Refrigeración">Refrigeración</option>
+        </select>
+        <label>Cantidad inicial</label>
+        <input type="number" id="cantInicial" required>
+        <label>Cantidad disponible</label>
+        <input type="number" id="cantDisponible" required>
+        <label>Rebaja / Oferta (%)</label>
+        <input type="number" id="rebaja">
+        <label>Días restantes de rebaja</label>
+        <input type="number" id="diasRebaja">
+        <button type="submit">➕ Agregar producto</button>
+      </form>
 
-      <label>Descripción</label>
-      <textarea id="descripcion" rows="3" required></textarea>
+      <h2>Inventario</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Rebaja</th>
+            <th>Días Rebaja</th>
+            <th>Cant. Inicial</th>
+            <th>Cant. Disponible</th>
+            <th>Categoría</th>
+          </tr>
+        </thead>
+        <tbody id="tablaProductos"></tbody>
+      </table>
 
-      <label>Precio</label>
-      <input type="number" id="precio" required>
-
-      <label>Rebaja / Oferta (%)</label>
-      <input type="number" id="rebaja">
-
-      <label>Categoría</label>
-      <select id="categoria" required>
-        <option value="">Seleccione una categoría</option>
-        <option value="Electrodomésticos">Electrodomésticos</option>
-        <option value="Cocina">Cocina</option>
-        <option value="Audio">Audio</option>
-        <option value="Refrigeración">Refrigeración</option>
-      </select>
-
-      <label>Imagen del producto (URL)</label>
-      <input type="text" id="imagen">
-
-      <button type="submit">➕ Agregar producto</button>
-    </form>
-
-    <!-- Tabla de productos -->
-    <h2>Productos agregados</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Rebaja</th>
-          <th>Categoría</th>
-          <th>Imagen</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="tablaProductos">
-        <!-- Aquí se insertarán los productos dinámicamente -->
-      </tbody>
-    </table>
+      <!-- Botón Descargar -->
+      <button id="descargarBtn">💾 Descargar productos.json</button>
+    </div>
   </div>
 
   <script>
+    // Login
+    function validarLogin() {
+      const user = document.getElementById('usuario').value;
+      const pass = document.getElementById('clave').value;
+      if(user === "Marcos" && pass === "Marcos*2026") {
+        document.getElementById('login').style.display = "none";
+        document.getElement validarLogin() {
+      const user = document.getElementById('usuario').value;
+      const pass = document.getElementById('clave').value;
+      if(user === "Marcos" && pass === "Marcos*2026") {
+        document.getElementById('login').style.display = "none";
+        document.getElementById('panel').style.display = "block";
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    }
+
+    // Generador de ID automático
+    let contadorID = 1;
+    function generarID() {
+      return "P" + String(contadorID++).padStart(3, '0');
+    }
+
+    // Lista de productos
+    const productos = [];
+
+    // Manejo de productos
     const form = document.getElementById('formProducto');
     const tabla = document.getElementById('tablaProductos');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
 
+      const id = generarID();
       const nombre = document.getElementById('nombre').value;
-      const descripcion = document.getElementById('descripcion').value;
       const precio = document.getElementById('precio').value;
-      const rebaja = document.getElementById('rebaja').value || '0';
-      const categoria = document.getElementById('categoria').value;
       const imagen = document.getElementById('imagen').value;
+      const descCorta = document.getElementById('descCorta').value;
+      const descLarga = document.getElementById('descLarga').value;
+      const categoria = document.getElementById('categoria').value;
+      const cantInicial = parseInt(document.getElementById('cantInicial').value);
+      const cantDisponible = parseInt(document.getElementById('cantDisponible').value);
+      const rebaja = document.getElementById('rebaja').value || '0';
+      const diasRebaja = document.getElementById('diasRebaja').value || '0';
+
+      const producto = { id, nombre, precio, imagen, descCorta, descLarga, categoria, cantInicial, cantDisponible, rebaja, diasRebaja };
+      productos.push(producto);
 
       const fila = document.createElement('tr');
       fila.innerHTML = `
+        <td>${id}</td>
         <td>${nombre}</td>
-        <td>${descripcion}</td>
         <td>$${precio}</td>
         <td>${rebaja}%</td>
+        <td>${diasRebaja}</td>
+        <td>${cantInicial}</td>
+        <td>${cantDisponible}</td>
         <td>${categoria}</td>
-        <td>${imagen ? `<a href="${imagen}" target="_blank">Ver imagen</a>` : 'Sin imagen'}</td>
-        <td class="acciones">
-          <button class="editar">Editar</button>
-          <button class="eliminar">Eliminar</button>
-          <button class="activar">Activar</button>
-        </td>
       `;
-      tabla.appendChild(fila);
 
+      // Colorear según estado
+      if(cantDisponible === 0) {
+        fila.className = "agotado";
+      } else if(cantDisponible <= 5) {
+        fila.className = "pocos";
+      } else if(cantDisponible < cantInicial) {
+        fila.className = "normal";
+      } else {
+        fila.className = "sinventas";
+      }
+
+      tabla.appendChild(fila);
       form.reset();
     });
-  </script>
 
-</body>
-  </html>
+    // Descargar productos.json
+    document.getElementById('descargarBtn').addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(productos, null, 2));
+      const dlAnchor
