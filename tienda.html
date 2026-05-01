@@ -3,9 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <title>Tienda - ElectroMarket Holguín</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6e6e6;
+    }
+
+    header {
+      background: #0066cc;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    .buscador input {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      width: 200px;
+    }
+
+    .carrito {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .catalogo {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .producto {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      min-height: 180px;
+    }
+
+    .producto h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .producto p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .catalogo {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .catalogo {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>🛍️ Tienda en construcción</h1>
-  <p>Aquí aparecerá el catálogo de productos con menú superior, barra de búsqueda y carrito.</p>
+
+  <!-- Header -->
+  <header>
+    <h1>ElectroMarket Holguín</h1>
+    <div class="buscador">
+      <input type="text" placeholder="Buscar producto...">
+    </div>
+    <div class="carrito" onclick="window.location.href='carrito.html'">🛒 Carrito (0)</div>
+  </header>
+
+  <!-- Catálogo vacío con 16 casillas -->
+  <main class="catalogo">
+    <div class="producto"><h3>Producto 1</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 2</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 3</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 4</h3><p>Espacio reservado</p></div>
+
+    <div class="producto"><h3>Producto 5</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 6</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 7</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 8</h3><p>Espacio reservado</p></div>
+
+    <div class="producto"><h3>Producto 9</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 10</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 11</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 12</h3><p>Espacio reservado</p></div>
+
+    <div class="producto"><h3>Producto 13</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 14</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 15</h3><p>Espacio reservado</p></div>
+    <div class="producto"><h3>Producto 16</h3><p>Espacio reservado</p></div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    📞 +53 51421460 | 📧 marcosdavidim2003@gmail.com | 📍 Holguín, Cuba
+  </footer>
+
 </body>
 </html>
