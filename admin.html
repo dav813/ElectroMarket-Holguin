@@ -33,7 +33,7 @@
     <input type="text" id="usuario" placeholder="Escribe tu usuario">
     <label for="clave">Contraseña</label>
     <input type="password" id="clave" placeholder="Escribe tu contraseña">
-    <button onclick="validarLogin()">Entrar</button>
+    <button id="btnEntrar">Entrar</button>
   </div>
 
   <!-- Panel oculto -->
@@ -94,17 +94,18 @@
   </div>
 
   <script>
-    // Login
-    function validarLogin() {
-      const user = document.getElementById('usuario').value;
-      const pass = document.getElementById('clave').value;
+    // Login corregido
+    document.getElementById("btnEntrar").addEventListener("click", function() {
+      const user = document.getElementById('usuario').value.trim();
+      const pass = document.getElementById('clave').value.trim();
+
       if(user === "Marcos" && pass === "Marcos*2026") {
         document.getElementById('login').style.display = "none";
         document.getElementById('panel').style.display = "block";
       } else {
         alert("Usuario o contraseña incorrectos");
       }
-    }
+    });
 
     // Generador de ID automático
     let contadorID = 1;
@@ -149,7 +150,6 @@
         <td>${categoria}</td>
       `;
 
-      // Colorear según estado
       if(cantDisponible === 0) {
         fila.className = "agotado";
       } else if(cantDisponible <= 5) {
@@ -168,7 +168,4 @@
     document.getElementById('descargarBtn').addEventListener('click', () => {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(productos, null, 2));
       const dlAnchor = document.createElement('a');
-      dlAnchor.setAttribute("href", dataStr);
-      dlAnchor.setAttribute("download", "productos.json");
-      dlAnchor.click();
-    });
+      dlAnchor.set
