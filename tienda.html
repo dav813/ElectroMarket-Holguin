@@ -2,92 +2,214 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Tienda - ElectroMarket Holguín</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda Ultra Pro</title>
 
 <style>
-/* TODO TU CSS SE QUEDA IGUAL */
-body { font-family: Arial, sans-serif; background:#e6e6e6; padding-top:62px; }
-.catalogo { display:grid; grid-template-columns: repeat(4,1fr); gap:16px; padding:20px; }
-.producto { background:white; padding:10px; border-radius:10px; }
+body { font-family: Arial; margin: 0; background: #f5f5f5; }
+
+header { background: black; color: white; padding: 10px; text-align: center; }
+
+#buscador { width: 90%; margin: 10px auto; padding: 10px; display: block; }
+
+#productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.producto {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.producto img { width: 100%; }
+
+.fav {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#carrito {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border-top: 2px solid black;
+  padding: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+#whatsapp {
+  position: fixed;
+  right: 15px;
+  bottom: 270px;
+  background: green;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+}
+
+#pedidoBtn {
+  background: orange;
+  width: 100%;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h2>Tienda ElectroMarket</h2>
+<h2>🛒 Mi Tienda</h2>
+<p>Carrito: <span id="contador">0</span></p>
 </header>
 
-<p id="sinResultados" style="display:none;">No hay productos</p>
+<input id="buscador" placeholder="Buscar..." onkeyup="filtrarProductos()">
 
-<div class="catalogo" id="catalogo"></div>
+<div id="productos"></div>
+
+<div id="carrito">
+<h3>Carrito</h3>
+<div id="listaCarrito"></div>
+<p>Total: $<span id="total">0</span></p>
+<button onclick="vaciarCarrito()">Vaciar</button>
+<button id="pedidoBtn" onclick="simularPedido()">Finalizar Pedido</button>
+</div>
+
+<a id="whatsapp" target="_blank">💬</a>
 
 <script>
 
-const PRODUCTOS_DEFAULT = [
-  {
-    id: "P001",
-    nombre: "Televisor Samsung 32\"",
-    categoria: "Televisores",
-    precio: 250,
-    descCorta: "Smart TV Full HD"
-  }
-];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+let productosGlobal = [];
 
-/* =========================
-   🔥 ARREGLO PRINCIPAL
-   ========================= */
-
+// 🔹 CARGAR PRODUCTOS
 function cargarProductos() {
-  const guardados = localStorage.getItem("em_productos");
+  const cont = document.getElementById("productos");
+  cont.innerHTML = "";
 
-  if (guardados) {
-    try {
-      return JSON.parse(guardados);
-    } catch (e) {
-      console.log("Error leyendo localStorage");
-    }
-  }
+  const productos = JSON.parse(localStorage.getItem("em_productos")) || [];
+  productosGlobal = productos;
 
-  return PRODUCTOS_DEFAULT;
+  productos.forEach(p => mostrarProducto(p));
 }
 
-/* ❌ ESTO FALTABA EN TU TIENDA */
-function render() {
-  const contenedor = document.getElementById("catalogo");
+// 🔹 MOSTRAR PRODUCTO
+function mostrarProducto(p) {
+  const cont = document.getElementById("productos");
 
-  const productos = cargarProductos();
+  let esFav = favoritos.find(f => f.id === p.id);
 
-  contenedor.innerHTML = "";
+  cont.innerHTML += `
+    <div class="producto">
+      <span class="fav" onclick='toggleFav(${JSON.stringify(p)})'>
+        ${esFav ? "❤️" : "🤍"}
+      </span>
+      <img src="${p.imagen}">
+      <h3>${p.nombre}</h3>
+      <p>${p.descCorta}</p>
+      <p><b>$${p.precio}</b></p>
+      <button onclick='agregarCarrito(${JSON.stringify(p)})'>Agregar</button>
+    </div>
+  `;
+}
 
-  if (!productos || productos.length === 0) {
-    document.getElementById("sinResultados").style.display = "block";
-    return;
+// 🔹 FAVORITOS
+function toggleFav(p) {
+  let index = favoritos.findIndex(f => f.id === p.id);
+
+  if(index >= 0){
+    favoritos.splice(index, 1);
+  } else {
+    favoritos.push(p);
   }
 
-  document.getElementById("sinResultados").style.display = "none";
+  localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  cargarProductos();
+}
 
-  productos.forEach(p => {
-    contenedor.innerHTML += `
-      <div class="producto">
-        <h3>${p.nombre}</h3>
-        <p>${p.descCorta || ""}</p>
-        <b>$${p.precio}</b>
+// 🔹 BUSCADOR
+function filtrarProductos() {
+  const txt = document.getElementById("buscador").value.toLowerCase();
+  const cont = document.getElementById("productos");
+  cont.innerHTML = "";
+
+  productosGlobal
+    .filter(p => p.nombre.toLowerCase().includes(txt))
+    .forEach(p => mostrarProducto(p));
+}
+
+// 🔹 CARRITO
+function agregarCarrito(p) {
+  carrito.push(p);
+  guardarCarrito();
+  mostrarCarrito();
+}
+
+function guardarCarrito() {
+  localStorage.setItem("carrito", JSON.stringify(carrito));
+}
+
+function mostrarCarrito() {
+  let lista = document.getElementById("listaCarrito");
+  lista.innerHTML = "";
+  let total = 0;
+
+  carrito.forEach((p,i)=>{
+    total += p.precio;
+    lista.innerHTML += `
+      <div>
+        ${p.nombre} - $${p.precio}
+        <button onclick="eliminar(${i})">❌</button>
       </div>
     `;
   });
+
+  document.getElementById("total").innerText = total;
+  document.getElementById("contador").innerText = carrito.length;
+
+  actualizarWhatsApp();
 }
 
-/* 🔥 CARGA AUTOMÁTICA */
-render();
+function eliminar(i){
+  carrito.splice(i,1);
+  guardarCarrito();
+  mostrarCarrito();
+}
 
-/* 🔥 ACTUALIZA SI VIENES DEL ADMIN */
-window.addEventListener("storage", function(e) {
-  if (e.key === "em_productos") {
-    render();
-  }
-});
+function vaciarCarrito(){
+  carrito = [];
+  guardarCarrito();
+  mostrarCarrito();
+}
+
+// 🔹 WHATSAPP AYUDA
+function actualizarWhatsApp(){
+  let msg = "Hola, necesito ayuda con:%0A";
+  carrito.forEach(p => msg += "- "+p.nombre+"%0A");
+
+  document.getElementById("whatsapp").href =
+    "https://wa.me/TU_NUMERO?text=" + msg;
+}
+
+// 🔹 SIMULAR PEDIDO
+function simularPedido(){
+  alert("✅ Pedido enviado (simulación)");
+  vaciarCarrito();
+}
+
+// 🔹 INICIO
+cargarProductos();
+mostrarCarrito();
 
 </script>
 
