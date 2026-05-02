@@ -3,121 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Tienda</title>
+<title>Admin Pro Inventario</title>
 
 <style>
-body { font-family: Arial; padding: 20px; background:#f4f4f4; }
+body{font-family:Arial;background:#f4f4f4;margin:0;}
+header{background:#0044aa;color:white;padding:15px;text-align:center;font-weight:bold;}
 
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
+.container{max-width:1100px;margin:auto;padding:15px;}
+
+.card{background:white;padding:15px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+
+input,textarea,select{
+width:100%;padding:10px;margin:5px 0 10px;
+border:1px solid #ddd;border-radius:6px;
 }
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  cursor: pointer;
+button{
+padding:8px 10px;border:none;border-radius:6px;
+cursor:pointer;font-weight:bold;
 }
 
-.card {
-  background: white;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
+.btn-save{background:#0044aa;color:white;width:100%;}
+
+/* TABLA */
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
 }
+
+th{
+background:#0044aa;
+color:white;
+padding:10px;
+font-size:12px;
+text-align:left;
+}
+
+td{
+padding:10px;
+font-size:13px;
+border-bottom:1px solid #eee;
+}
+
+/* ESTADOS */
+.estado-red{background:#ffebee;color:#c62828;font-weight:bold;}
+.estado-green{background:#e8f5e9;color:#2e7d32;font-weight:bold;}
+.estado-yellow{background:#fff8e1;color:#f9a825;font-weight:bold;}
+.estado-gray{background:#f5f5f5;color:#555;font-weight:bold;}
+
+.badge{
+padding:4px 8px;border-radius:6px;font-size:11px;
+display:inline-block;
+}
+
+.flex{display:flex;gap:8px;flex-wrap:wrap;}
+
+.btn-edit{background:#ff9800;color:white;}
+.btn-del{background:#e53935;color:white;}
 </style>
 </head>
 
 <body>
 
-<h2>Panel Admin</h2>
+<header>📦 ADMIN INVENTARIO PRO</header>
 
-<input id="nombre" placeholder="Nombre">
+<div class="container">
+
+<!-- FORM -->
+<div class="card">
+<h3>Crear / Editar Producto</h3>
+
+<input id="id" disabled placeholder="ID automático">
+<input id="nombre" placeholder="Nombre del producto">
 <input id="categoria" placeholder="Categoría">
 <input id="precio" type="number" placeholder="Precio">
-<input id="stock" type="number" placeholder="Stock">
+
+<select id="oferta">
+<option value="no">Sin oferta</option>
+<option value="si">En oferta</option>
+</select>
+
+<input id="diasOferta" type="number" placeholder="Días de oferta">
+
+<input id="stockInicial" type="number" placeholder="Cantidad inicial">
+<input id="stockActual" type="number" placeholder="Cantidad disponible">
 
 <textarea id="descCorta" placeholder="Descripción corta"></textarea>
-<textarea id="descLarga" placeholder="Descripción larga"></textarea>
 
-<button onclick="guardarProducto()">Guardar producto</button>
+<button class="btn-save" onclick="guardar()">Guardar producto</button>
+</div>
 
-<h3>Productos</h3>
-<div id="lista"></div>
+<!-- INVENTARIO -->
+<div class="card">
+<h3>📊 Inventario (Tabla Pro)</h3>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Stock Inicial</th>
+<th>Disponible</th>
+<th>Precio</th>
+<th>Oferta</th>
+<th>Días</th>
+<th>Ventas</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tabla"></tbody>
+
+</table>
+</div>
+
+</div>
 
 <script>
 
-function obtenerProductos() {
-  return JSON.parse(localStorage.getItem("em_productos")) || [];
+// DATA
+function getProductos(){
+return JSON.parse(localStorage.getItem("em_productos")) || [];
 }
 
-// 🔥 GUARDAR PRODUCTO
-function guardarProducto() {
-
-  let productos = obtenerProductos();
-
-  let nuevo = {
-    id: crypto.randomUUID(), // 👈 mejor para futuro Supabase
-    nombre: document.getElementById("nombre").value,
-    categoria: document.getElementById("categoria").value,
-    precio: Number(document.getElementById("precio").value),
-    stock: Number(document.getElementById("stock").value),
-    descCorta: document.getElementById("descCorta").value,
-    descLarga: document.getElementById("descLarga").value,
-    imagen: ""
-  };
-
-  productos.push(nuevo);
-
-  localStorage.setItem("em_productos", JSON.stringify(productos));
-
-  limpiar();
-  mostrar();
+function saveProductos(d){
+localStorage.setItem("em_productos",JSON.stringify(d));
 }
 
-// 🔥 MOSTRAR PRODUCTOS
-function mostrar() {
-
-  let productos = obtenerProductos();
-
-  let cont = document.getElementById("lista");
-  cont.innerHTML = "";
-
-  productos.forEach((p, i) => {
-    cont.innerHTML += `
-      <div class="card">
-        <b>${p.nombre}</b><br>
-        ${p.categoria}<br>
-        $${p.precio}<br>
-        <button onclick="eliminar(${i})">Eliminar</button>
-      </div>
-    `;
-  });
+function getCompras(){
+return JSON.parse(localStorage.getItem("em_compras")) || [];
 }
 
-// 🔥 ELIMINAR
-function eliminar(i) {
-
-  let productos = obtenerProductos();
-  productos.splice(i, 1);
-
-  localStorage.setItem("em_productos", JSON.stringify(productos));
-
-  mostrar();
+// ID AUTO
+function generarID(){
+return "P" + Date.now();
 }
 
-// 🔥 LIMPIAR
-function limpiar() {
-  document.getElementById("nombre").value = "";
-  document.getElementById("categoria").value = "";
-  document.getElementById("precio").value = "";
-  document.getElementById("stock").value = "";
-  document.getElementById("descCorta").value = "";
-  document.getElementById("descLarga").value = "";
+// VENTAS
+function contarVentas(id){
+return getCompras().filter(x=>x.productoId===id).length;
 }
 
-mostrar();
+// ESTADO
+function estado(p){
+
+let ventas = contarVentas(p.id);
+
+if(p.stockActual<=0) return "red";
+if(ventas===0) return "gray";
+if(p.stockActual <= p.stockInicial*0.3) return "yellow";
+return "green";
+}
+
+// GUARDAR
+function guardar(){
+
+let productos = getProductos();
+
+let id = document.getElementById("id").value || generarID();
+
+let p = {
+id,
+nombre:document.getElementById("nombre").value,
+categoria:document.getElementById("categoria").value,
+precio:parseFloat(document.getElementById("precio").value),
+oferta:document.getElementById("oferta").value,
+diasOferta:parseInt(document.getElementById("diasOferta").value||0),
+stockInicial:parseInt(document.getElementById("stockInicial").value),
+stockActual:parseInt(document.getElementById("stockActual").value),
+descCorta:document.getElementById("descCorta").value
+};
+
+productos = productos.filter(x=>x.id!==id);
+productos.push(p);
+
+saveProductos(productos);
+limpiar();
+render();
+}
+
+// LIMPIAR
+function limpiar(){
+document.getElementById("id").value="";
+document.getElementById("nombre").value="";
+document.getElementById("categoria").value="";
+document.getElementById("precio").value="";
+document.getElementById("diasOferta").value="";
+document.getElementById("stockInicial").value="";
+document.getElementById("stockActual").value="";
+document.getElementById("descCorta").value="";
+}
+
+// EDITAR
+function edit(id){
+let p = getProductos().find(x=>x.id===id);
+document.getElementById("id").value=p.id;
+document.getElementById("nombre").value=p.nombre;
+document.getElementById("categoria").value=p.categoria;
+document.getElementById("precio").value=p.precio;
+document.getElementById("oferta").value=p.oferta;
+document.getElementById("diasOferta").value=p.diasOferta;
+document.getElementById("stockInicial").value=p.stockInicial;
+document.getElementById("stockActual").value=p.stockActual;
+document.getElementById("descCorta").value=p.descCorta;
+}
+
+// ELIMINAR
+function del(id){
+saveProductos(getProductos().filter(x=>x.id!==id));
+render();
+}
+
+// RENDER
+function render(){
+
+let tabla = document.getElementById("tabla");
+let productos = getProductos();
+tabla.innerHTML="";
+
+productos.forEach(p=>{
+
+let st = estado(p);
+let ventas = contarVentas(p.id);
+
+tabla.innerHTML += `
+<tr class="estado-${st}">
+<td>${p.id}</td>
+<td>${p.nombre}</td>
+<td>${p.stockInicial}</td>
+<td>${p.stockActual}</td>
+<td>$${p.precio}</td>
+<td>${p.oferta}</td>
+<td>${p.diasOferta}</td>
+<td>${ventas}</td>
+<td>
+<span class="badge">${st}</span>
+</td>
+<td class="flex">
+<button class="btn-edit" onclick="edit('${p.id}')">Editar</button>
+<button class="btn-del" onclick="del('${p.id}')">Eliminar</button>
+</td>
+</tr>
+`;
+});
+
+}
+
+render();
 
 </script>
 
