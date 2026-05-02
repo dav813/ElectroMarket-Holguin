@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Seguro</title>
+<title>Admin Tienda</title>
 
 <style>
 body {
   font-family: Arial;
-  background: #f2f2f2;
   margin: 0;
+  background: #f2f2f2;
 }
 
 /* LOGIN */
@@ -29,10 +29,11 @@ body {
   text-align: center;
 }
 
-input {
+input, textarea {
   width: 100%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 6px 0;
+  box-sizing: border-box;
 }
 
 button {
@@ -42,12 +43,13 @@ button {
   color: white;
   border: none;
   cursor: pointer;
+  margin-top: 8px;
 }
 
 /* ADMIN */
 #admin {
   display: none;
-  padding: 20px;
+  padding: 15px;
 }
 
 .producto {
@@ -65,9 +67,12 @@ button {
 <div id="login">
   <div class="box">
     <h3>Acceso Admin</h3>
+
     <input id="user" placeholder="Usuario">
     <input id="pass" type="password" placeholder="Contraseña">
+
     <button onclick="login()">Entrar</button>
+
     <p id="error" style="color:red;"></p>
   </div>
 </div>
@@ -85,40 +90,39 @@ button {
 
 <button onclick="guardar()">Guardar producto</button>
 
-<h3>Lista</h3>
+<h3>Productos</h3>
 <div id="lista"></div>
 
 </div>
 
 <script>
 
-/* 🔐 LOGIN SIMPLE */
+/// 🔐 LOGIN CORREGIDO
 function login() {
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+  const u = document.getElementById("user").value.trim();
+  const p = document.getElementById("pass").value.trim();
 
-  // usuario y contraseña (puedes cambiarlos)
   if (u === "admin" && p === "1234") {
     document.getElementById("login").style.display = "none";
     document.getElementById("admin").style.display = "block";
     mostrar();
   } else {
-    document.getElementById("error").innerText = "❌ Acceso incorrecto";
+    document.getElementById("error").innerText = "❌ Usuario o contraseña incorrectos";
   }
 }
 
-/* 💾 GUARDAR PRODUCTO */
+/// 💾 GUARDAR PRODUCTO
 function guardar() {
 
   let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
 
-  let nuevo = {
+  const nuevo = {
     id: "P" + Date.now(),
-    nombre: nombre.value,
-    categoria: categoria.value,
-    precio: parseFloat(precio.value),
-    stock: parseInt(stock.value),
-    descCorta: desc.value
+    nombre: document.getElementById("nombre").value.trim(),
+    categoria: document.getElementById("categoria").value.trim(),
+    precio: parseFloat(document.getElementById("precio").value),
+    stock: parseInt(document.getElementById("stock").value),
+    descCorta: document.getElementById("desc").value.trim()
   };
 
   productos.push(nuevo);
@@ -129,8 +133,9 @@ function guardar() {
   mostrar();
 }
 
-/* 📦 MOSTRAR */
+/// 📦 MOSTRAR PRODUCTOS
 function mostrar() {
+
   let lista = document.getElementById("lista");
   let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
 
@@ -140,6 +145,7 @@ function mostrar() {
     lista.innerHTML += `
       <div class="producto">
         <b>${p.nombre}</b><br>
+        ${p.categoria}<br>
         $${p.precio}<br>
         <button onclick="eliminar(${i})">Eliminar</button>
       </div>
@@ -147,21 +153,21 @@ function mostrar() {
   });
 }
 
-/* 🗑 ELIMINAR */
+/// 🗑 ELIMINAR
 function eliminar(i) {
   let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
-  productos.splice(i,1);
+  productos.splice(i, 1);
   localStorage.setItem("em_productos", JSON.stringify(productos));
   mostrar();
 }
 
-/* 🧹 LIMPIAR */
+/// 🧹 LIMPIAR
 function limpiar() {
-  nombre.value = "";
-  categoria.value = "";
-  precio.value = "";
-  stock.value = "";
-  desc.value = "";
+  document.getElementById("nombre").value = "";
+  document.getElementById("categoria").value = "";
+  document.getElementById("precio").value = "";
+  document.getElementById("stock").value = "";
+  document.getElementById("desc").value = "";
 }
 
 </script>
