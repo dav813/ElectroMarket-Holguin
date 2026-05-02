@@ -6,53 +6,21 @@
 <title>Admin Tienda</title>
 
 <style>
-body {
-  font-family: Arial;
-  margin: 0;
-  background: #f2f2f2;
-}
-
-/* LOGIN */
-#login {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg,#0044aa,#0066cc);
-}
-
-.box {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  width: 280px;
-  text-align: center;
-}
+body { font-family: Arial; padding: 20px; background:#f4f4f4; }
 
 input, textarea {
   width: 100%;
   padding: 10px;
   margin: 6px 0;
-  box-sizing: border-box;
 }
 
 button {
-  width: 100%;
   padding: 10px;
-  background: #0044aa;
-  color: white;
-  border: none;
+  margin-top: 10px;
   cursor: pointer;
-  margin-top: 8px;
 }
 
-/* ADMIN */
-#admin {
-  display: none;
-  padding: 15px;
-}
-
-.producto {
+.card {
   background: white;
   padding: 10px;
   margin-top: 10px;
@@ -63,66 +31,41 @@ button {
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="box">
-    <h3>Acceso Admin</h3>
-
-    <input id="user" placeholder="Usuario">
-    <input id="pass" type="password" placeholder="Contraseña">
-
-    <button onclick="login()">Entrar</button>
-
-    <p id="error" style="color:red;"></p>
-  </div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin">
-
-<h2>Panel de productos</h2>
+<h2>Panel Admin</h2>
 
 <input id="nombre" placeholder="Nombre">
 <input id="categoria" placeholder="Categoría">
 <input id="precio" type="number" placeholder="Precio">
 <input id="stock" type="number" placeholder="Stock">
-<textarea id="desc" placeholder="Descripción"></textarea>
 
-<button onclick="guardar()">Guardar producto</button>
+<textarea id="descCorta" placeholder="Descripción corta"></textarea>
+<textarea id="descLarga" placeholder="Descripción larga"></textarea>
+
+<button onclick="guardarProducto()">Guardar producto</button>
 
 <h3>Productos</h3>
 <div id="lista"></div>
 
-</div>
-
 <script>
 
-/// 🔐 LOGIN CORREGIDO
-function login() {
-  const u = document.getElementById("user").value.trim();
-  const p = document.getElementById("pass").value.trim();
-
-  if (u === "admin" && p === "1234") {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("admin").style.display = "block";
-    mostrar();
-  } else {
-    document.getElementById("error").innerText = "❌ Usuario o contraseña incorrectos";
-  }
+function obtenerProductos() {
+  return JSON.parse(localStorage.getItem("em_productos")) || [];
 }
 
-/// 💾 GUARDAR PRODUCTO
-function guardar() {
+// 🔥 GUARDAR PRODUCTO
+function guardarProducto() {
 
-  let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
+  let productos = obtenerProductos();
 
-  const nuevo = {
-    id: "P" + Date.now(),
-    nombre: document.getElementById("nombre").value.trim(),
-    categoria: document.getElementById("categoria").value.trim(),
-    precio: parseFloat(document.getElementById("precio").value),
-    stock: parseInt(document.getElementById("stock").value),
-    descCorta: document.getElementById("desc").value.trim()
+  let nuevo = {
+    id: crypto.randomUUID(), // 👈 mejor para futuro Supabase
+    nombre: document.getElementById("nombre").value,
+    categoria: document.getElementById("categoria").value,
+    precio: Number(document.getElementById("precio").value),
+    stock: Number(document.getElementById("stock").value),
+    descCorta: document.getElementById("descCorta").value,
+    descLarga: document.getElementById("descLarga").value,
+    imagen: ""
   };
 
   productos.push(nuevo);
@@ -133,17 +76,17 @@ function guardar() {
   mostrar();
 }
 
-/// 📦 MOSTRAR PRODUCTOS
+// 🔥 MOSTRAR PRODUCTOS
 function mostrar() {
 
-  let lista = document.getElementById("lista");
-  let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
+  let productos = obtenerProductos();
 
-  lista.innerHTML = "";
+  let cont = document.getElementById("lista");
+  cont.innerHTML = "";
 
   productos.forEach((p, i) => {
-    lista.innerHTML += `
-      <div class="producto">
+    cont.innerHTML += `
+      <div class="card">
         <b>${p.nombre}</b><br>
         ${p.categoria}<br>
         $${p.precio}<br>
@@ -153,22 +96,28 @@ function mostrar() {
   });
 }
 
-/// 🗑 ELIMINAR
+// 🔥 ELIMINAR
 function eliminar(i) {
-  let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
+
+  let productos = obtenerProductos();
   productos.splice(i, 1);
+
   localStorage.setItem("em_productos", JSON.stringify(productos));
+
   mostrar();
 }
 
-/// 🧹 LIMPIAR
+// 🔥 LIMPIAR
 function limpiar() {
   document.getElementById("nombre").value = "";
   document.getElementById("categoria").value = "";
   document.getElementById("precio").value = "";
   document.getElementById("stock").value = "";
-  document.getElementById("desc").value = "";
+  document.getElementById("descCorta").value = "";
+  document.getElementById("descLarga").value = "";
 }
+
+mostrar();
 
 </script>
 
