@@ -3,213 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tienda Ultra Pro</title>
+<title>ElectroMarketHolguin</title>
 
 <style>
-body { font-family: Arial; margin: 0; background: #f5f5f5; }
+body { margin:0; font-family:Arial; background:#f3f3f3; }
 
-header { background: black; color: white; padding: 10px; text-align: center; }
+/* HEADER */
+.header {
+  display:flex;
+  align-items:center;
+  background:#131921;
+  color:white;
+  padding:10px;
+}
 
-#buscador { width: 90%; margin: 10px auto; padding: 10px; display: block; }
+.logo {
+  font-size:18px;
+  font-weight:bold;
+}
 
-#productos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
-  padding: 10px;
+.search {
+  flex:1;
+  margin:0 10px;
+}
+
+.search input {
+  width:100%;
+  padding:8px;
+}
+
+.cart {
+  cursor:pointer;
+}
+
+/* FILTROS */
+.filtros {
+  background:white;
+  padding:10px;
+}
+
+.filtros input {
+  width:100%;
+  padding:8px;
+  margin:5px 0;
+}
+
+/* PRODUCTOS */
+.productos {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px;
+  padding:10px;
 }
 
 .producto {
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-  position: relative;
+  background:white;
+  padding:10px;
+  border:1px solid #ddd;
 }
 
-.producto img { width: 100%; }
-
-.fav {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
-  font-size: 20px;
+.producto img {
+  width:100%;
+  height:150px;
+  object-fit:cover;
 }
 
-#carrito {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  border-top: 2px solid black;
-  padding: 10px;
-  max-height: 250px;
-  overflow-y: auto;
+/* BOTONES */
+button {
+  padding:8px;
+  margin-top:5px;
+  width:100%;
+  cursor:pointer;
 }
 
-#whatsapp {
-  position: fixed;
-  right: 15px;
-  bottom: 270px;
-  background: green;
-  color: white;
-  padding: 15px;
-  border-radius: 50%;
-}
-
-#pedidoBtn {
-  background: orange;
-  width: 100%;
+/* CARRITO */
+.carrito-panel {
+  position:fixed;
+  right:0;
+  top:0;
+  width:300px;
+  height:100%;
+  background:white;
+  border-left:2px solid #ccc;
+  padding:10px;
+  overflow:auto;
+  display:none;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h2>🛒 Mi Tienda</h2>
-<p>Carrito: <span id="contador">0</span></p>
-</header>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">ElectroMarketHolguin</div>
 
-<input id="buscador" placeholder="Buscar..." onkeyup="filtrarProductos()">
+  <div class="search">
+    <input type="text" id="busqueda" placeholder="Buscar productos...">
+  </div>
 
-<div id="productos"></div>
-
-<div id="carrito">
-<h3>Carrito</h3>
-<div id="listaCarrito"></div>
-<p>Total: $<span id="total">0</span></p>
-<button onclick="vaciarCarrito()">Vaciar</button>
-<button id="pedidoBtn" onclick="simularPedido()">Finalizar Pedido</button>
+  <div class="cart" onclick="toggleCarrito()">
+    🛒 <span id="contador">0</span>
+  </div>
 </div>
 
-<a id="whatsapp" target="_blank">💬</a>
+<!-- FILTROS -->
+<div class="filtros">
+  <input type="text" id="filtroCategoria" placeholder="Categoría">
+  <input type="number" id="precioMin" placeholder="Precio mínimo">
+  <input type="number" id="precioMax" placeholder="Precio máximo">
+  <button onclick="cargarProductos()">Filtrar</button>
+</div>
+
+<!-- PRODUCTOS -->
+<div class="productos" id="productos"></div>
+
+<!-- CARRITO -->
+<div class="carrito-panel" id="carritoPanel">
+  <h3>Carrito</h3>
+  <div id="carritoItems"></div>
+  <h4>Total: $<span id="total">0</span></h4>
+  <button onclick="vaciarCarrito()">Vaciar carrito</button>
+</div>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/5351421460" target="_blank" style="
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px;
+border-radius:50%;
+font-size:22px;
+text-decoration:none;
+">💬</a>
 
 <script>
 
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-let productosGlobal = [];
-
 // 🔹 CARGAR PRODUCTOS
 function cargarProductos() {
-  const cont = document.getElementById("productos");
-  cont.innerHTML = "";
 
-  const productos = JSON.parse(localStorage.getItem("em_productos")) || [];
-  productosGlobal = productos;
+  let productos = JSON.parse(localStorage.getItem("em_productos")) || [];
+  let contenedor = document.getElementById("productos");
+  contenedor.innerHTML = "";
 
-  productos.forEach(p => mostrarProducto(p));
-}
+  let texto = busqueda.value.toLowerCase();
+  let categoria = filtroCategoria.value.toLowerCase();
+  let min = parseFloat(precioMin.value) || 0;
+  let max = parseFloat(precioMax.value) || Infinity;
 
-// 🔹 MOSTRAR PRODUCTO
-function mostrarProducto(p) {
-  const cont = document.getElementById("productos");
+  let filtrados = productos.filter(p =>
+    p.nombre.toLowerCase().includes(texto) &&
+    p.categoria.toLowerCase().includes(categoria) &&
+    p.precio >= min &&
+    p.precio <= max
+  );
 
-  let esFav = favoritos.find(f => f.id === p.id);
-
-  cont.innerHTML += `
-    <div class="producto">
-      <span class="fav" onclick='toggleFav(${JSON.stringify(p)})'>
-        ${esFav ? "❤️" : "🤍"}
-      </span>
-      <img src="${p.imagen}">
-      <h3>${p.nombre}</h3>
-      <p>${p.descCorta}</p>
-      <p><b>$${p.precio}</b></p>
-      <button onclick='agregarCarrito(${JSON.stringify(p)})'>Agregar</button>
-    </div>
-  `;
-}
-
-// 🔹 FAVORITOS
-function toggleFav(p) {
-  let index = favoritos.findIndex(f => f.id === p.id);
-
-  if(index >= 0){
-    favoritos.splice(index, 1);
-  } else {
-    favoritos.push(p);
+  if (filtrados.length === 0) {
+    contenedor.innerHTML = "<p>No hay productos</p>";
+    return;
   }
 
-  localStorage.setItem("favoritos", JSON.stringify(favoritos));
-  cargarProductos();
-}
-
-// 🔹 BUSCADOR
-function filtrarProductos() {
-  const txt = document.getElementById("buscador").value.toLowerCase();
-  const cont = document.getElementById("productos");
-  cont.innerHTML = "";
-
-  productosGlobal
-    .filter(p => p.nombre.toLowerCase().includes(txt))
-    .forEach(p => mostrarProducto(p));
+  filtrados.forEach(p => {
+    contenedor.innerHTML += `
+      <div class="producto">
+        <img src="${p.imagen}">
+        <h4>${p.nombre}</h4>
+        <p>${p.descCorta}</p>
+        <b>$${p.precio}</b>
+        <button onclick='agregarCarrito(${JSON.stringify(p)})'>
+          Agregar al carrito
+        </button>
+      </div>
+    `;
+  });
 }
 
 // 🔹 CARRITO
+function getCarrito() {
+  return JSON.parse(localStorage.getItem("carrito")) || [];
+}
+
+function setCarrito(c) {
+  localStorage.setItem("carrito", JSON.stringify(c));
+}
+
 function agregarCarrito(p) {
-  carrito.push(p);
-  guardarCarrito();
-  mostrarCarrito();
+  let c = getCarrito();
+  c.push(p);
+  setCarrito(c);
+  actualizarCarrito();
 }
 
-function guardarCarrito() {
-  localStorage.setItem("carrito", JSON.stringify(carrito));
+function eliminarItem(i) {
+  let c = getCarrito();
+  c.splice(i,1);
+  setCarrito(c);
+  actualizarCarrito();
 }
 
-function mostrarCarrito() {
-  let lista = document.getElementById("listaCarrito");
-  lista.innerHTML = "";
+function vaciarCarrito() {
+  localStorage.removeItem("carrito");
+  actualizarCarrito();
+}
+
+function actualizarCarrito() {
+  let c = getCarrito();
+
+  contador.innerText = c.length;
+
+  let cont = document.getElementById("carritoItems");
+  cont.innerHTML = "";
+
   let total = 0;
 
-  carrito.forEach((p,i)=>{
+  c.forEach((p,i) => {
     total += p.precio;
-    lista.innerHTML += `
+    cont.innerHTML += `
       <div>
         ${p.nombre} - $${p.precio}
-        <button onclick="eliminar(${i})">❌</button>
+        <button onclick="eliminarItem(${i})">X</button>
       </div>
     `;
   });
 
   document.getElementById("total").innerText = total;
-  document.getElementById("contador").innerText = carrito.length;
-
-  actualizarWhatsApp();
 }
 
-function eliminar(i){
-  carrito.splice(i,1);
-  guardarCarrito();
-  mostrarCarrito();
+function toggleCarrito() {
+  let panel = document.getElementById("carritoPanel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
 }
 
-function vaciarCarrito(){
-  carrito = [];
-  guardarCarrito();
-  mostrarCarrito();
-}
+// 🔍 BUSCAR EN TIEMPO REAL
+busqueda.addEventListener("input", cargarProductos);
 
-// 🔹 WHATSAPP AYUDA
-function actualizarWhatsApp(){
-  let msg = "Hola, necesito ayuda con:%0A";
-  carrito.forEach(p => msg += "- "+p.nombre+"%0A");
-
-  document.getElementById("whatsapp").href =
-    "https://wa.me/TU_NUMERO?text=" + msg;
-}
-
-// 🔹 SIMULAR PEDIDO
-function simularPedido(){
-  alert("✅ Pedido enviado (simulación)");
-  vaciarCarrito();
-}
-
-// 🔹 INICIO
+// 🚀 INICIAR
 cargarProductos();
-mostrarCarrito();
+actualizarCarrito();
 
 </script>
 
