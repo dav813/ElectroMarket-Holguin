@@ -12,7 +12,7 @@ header{background:#0044aa;color:white;padding:15px;text-align:center;font-weight
 .container{max-width:1100px;margin:auto;padding:15px;}
 .card{background:white;padding:15px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 
-input,textarea,select{width:100%;padding:10px;margin:5px 0 10px;border:1px solid #ddd;border-radius:6px;}
+input,textarea{width:100%;padding:10px;margin:5px 0 10px;border:1px solid #ddd;border-radius:6px;}
 
 button{padding:8px 10px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;}
 .btn-save{background:#0044aa;color:white;width:100%;}
@@ -23,15 +23,16 @@ table{width:100%;border-collapse:collapse;background:white;}
 th{background:#0044aa;color:white;padding:10px;font-size:12px;text-align:left;}
 td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
-.estado-red{background:#ffebee;color:#c62828;}
-.estado-green{background:#e8f5e9;color:#2e7d32;}
-.estado-yellow{background:#fff8e1;color:#f9a825;}
-.estado-gray{background:#f5f5f5;color:#555;}
+.estado-red{background:#b71c1c;color:white;}
+.estado-green{background:#1b5e20;color:white;}
+.estado-yellow{background:#f57f17;color:black;}
+.estado-gray{background:#eeeeee;color:#555;}
 
 .flex{display:flex;gap:8px;flex-wrap:wrap;}
 
-.preview{border:1px solid #ddd;padding:10px;margin-top:10px;}
-.preview img{max-width:100%;}
+.preview{border:1px solid #ddd;padding:10px;margin-top:10px;border-radius:10px;}
+.preview img{width:100%;max-height:200px;object-fit:cover;}
+.tag{background:red;color:white;padding:3px 6px;border-radius:5px;font-size:12px;display:inline-block;margin-top:5px;}
 </style>
 </head>
 
@@ -41,7 +42,6 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
 <div class="container">
 
-<!-- LOGIN -->
 <div class="card" id="loginBox">
 <h3>🔐 Login</h3>
 <input id="user" placeholder="Usuario">
@@ -51,7 +51,6 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
 <div id="panel" style="display:none">
 
-<!-- FORM -->
 <div class="card">
 <h3>Producto</h3>
 
@@ -60,12 +59,7 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 <input id="categoria" placeholder="Categoría">
 <input id="precio" type="number" placeholder="Precio">
 
-<select id="oferta">
-<option value="no">Sin oferta</option>
-<option value="si">En oferta</option>
-</select>
-
-<input id="diasOferta" type="number" placeholder="Días oferta">
+<input id="descuento" type="number" placeholder="Descuento %">
 
 <input id="stockInicial" type="number" placeholder="Stock inicial">
 <input id="stockActual" type="number" placeholder="Stock disponible">
@@ -82,7 +76,6 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
 </div>
 
-<!-- INVENTARIO -->
 <div class="card">
 <h3>Inventario</h3>
 
@@ -104,7 +97,6 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
 </div>
 
-<!-- HISTORIAL -->
 <div class="card">
 <h3>Historial de compras</h3>
 <div id="historial"></div>
@@ -116,37 +108,37 @@ td{padding:10px;font-size:13px;border-bottom:1px solid #eee;}
 
 <script>
 
-// LOGIN SIMPLE
 function login(){
-if(document.getElementById("user").value==="admin" && document.getElementById("pass").value==="1234"){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("panel").style.display="block";
+if(user.value==="admin" && pass.value==="1234"){
+loginBox.style.display="none";
+panel.style.display="block";
 }
 }
 
-// STORAGE
 function getProductos(){return JSON.parse(localStorage.getItem("em_productos"))||[];}
 function saveProductos(d){localStorage.setItem("em_productos",JSON.stringify(d));}
 function getCompras(){return JSON.parse(localStorage.getItem("em_compras"))||[];}
 
-// ID
 function generarID(){return "P"+Date.now();}
-
-// VENTAS
 function ventas(id){return getCompras().filter(x=>x.productoId===id).length;}
 
-// ESTADO
 function estado(p){
 let v=ventas(p.id);
 if(p.stockActual<=0)return "red";
-if(v===0)return "gray";
 if(p.stockActual<=p.stockInicial*0.3)return "yellow";
-return "green";
+if(v>0)return "green";
+return "gray";
 }
 
-// IMAGEN BASE64
+function precioFinal(p){
+if(p.descuento>0){
+return p.precio-(p.precio*p.descuento/100);
+}
+return p.precio;
+}
+
 function getImg(){
-let file=document.getElementById("imagen").files[0];
+let file=imagen.files[0];
 if(!file)return Promise.resolve("");
 return new Promise(res=>{
 let reader=new FileReader();
@@ -155,7 +147,6 @@ reader.readAsDataURL(file);
 });
 }
 
-// GUARDAR
 async function guardar(){
 
 let productos=getProductos();
@@ -168,8 +159,7 @@ id,
 nombre:nombre.value,
 categoria:categoria.value,
 precio:parseFloat(precio.value),
-oferta:oferta.value,
-diasOferta:parseInt(diasOferta.value||0),
+descuento:parseInt(descuento.value||0),
 stockInicial:parseInt(stockInicial.value),
 stockActual:parseInt(stockActual.value),
 descCorta:descCorta.value,
@@ -181,26 +171,65 @@ productos=productos.filter(x=>x.id!==id);
 productos.push(p);
 
 saveProductos(productos);
+
+alert("✅ Guardado");
+
 limpiar();
 render();
 }
 
-// PREVIEW
 function preview(){
-previewBox.innerHTML=`
-<div class="preview">
-<h2>${nombre.value}</h2>
-<p>${descCorta.value}</p>
-<p><b>$${precio.value}</b></p>
-</div>`;
+
+let imgPreview="";
+let file=imagen.files[0];
+
+if(file){
+let reader=new FileReader();
+reader.onload=e=>{
+renderPreview(e.target.result);
+};
+reader.readAsDataURL(file);
+}else{
+renderPreview("");
 }
 
-// LIMPIAR
+function renderPreview(img){
+
+previewBox.innerHTML=`
+
+<div class="preview">
+
+<img src="${img || 'https://via.placeholder.com/300'}">
+
+<h2>${nombre.value}</h2>
+
+<p>
+${descuento.value>0 
+? `<span style="text-decoration:line-through">$${precio.value}</span> 
+<b>$${precio.value-(precio.value*descuento.value/100)}</b>
+<span class="tag">OFERTA 🔥</span>`
+: `$${precio.value}`
+}
+</p>
+
+<p>${descCorta.value}</p>
+
+<hr>
+
+<h4>Vista completa:</h4>
+<p>${descLarga.value}</p>
+
+</div>
+
+`;
+}
+
+}
+
 function limpiar(){
 document.querySelectorAll("input,textarea").forEach(x=>x.value="");
 }
 
-// EDIT
 function edit(id){
 let p=getProductos().find(x=>x.id===id);
 Object.keys(p).forEach(k=>{
@@ -208,16 +237,14 @@ if(document.getElementById(k)) document.getElementById(k).value=p[k];
 });
 }
 
-// DELETE
 function del(id){
 saveProductos(getProductos().filter(x=>x.id!==id));
 render();
 }
 
-// RENDER INVENTARIO
 function render(){
 
-let t=document.getElementById("tabla");
+let t=tabla;
 t.innerHTML="";
 
 getProductos().forEach(p=>{
@@ -230,7 +257,13 @@ t.innerHTML+=`
 <td>${p.nombre}</td>
 <td>${p.stockInicial}</td>
 <td>${p.stockActual}</td>
-<td>$${p.precio}</td>
+<td>
+${p.descuento>0 
+? `<span style="text-decoration:line-through">$${p.precio}</span> 
+<b>$${precioFinal(p)}</b>`
+: `$${p.precio}`
+}
+</td>
 <td>${ventas(p.id)}</td>
 <td>${st}</td>
 <td class="flex">
@@ -239,15 +272,13 @@ t.innerHTML+=`
 </td>
 </tr>
 `;
-
 });
 
 renderHistorial();
 }
 
-// HISTORIAL
 function renderHistorial(){
-let h=document.getElementById("historial");
+let h=historial;
 h.innerHTML="";
 getCompras().forEach(c=>{
 h.innerHTML+=`<p>Compra: ${c.productoId} - ${c.fecha}</p>`;
