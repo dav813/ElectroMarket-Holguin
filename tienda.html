@@ -17,35 +17,33 @@ body { margin:0; font-family:Arial; background:#f3f3f3; }
   padding:10px;
 }
 
-.logo {
-  font-size:18px;
-  font-weight:bold;
-}
+.logo { font-size:18px; font-weight:bold; }
 
-.search {
-  flex:1;
-  margin:0 10px;
-}
+.search { flex:1; margin:0 10px; }
 
-.search input {
-  width:100%;
-  padding:8px;
-}
+.search input { width:100%; padding:8px; }
 
-.cart {
-  cursor:pointer;
-}
+.cart { cursor:pointer; }
 
 /* FILTROS */
 .filtros {
   background:white;
   padding:10px;
+  display:none;
 }
 
 .filtros input {
   width:100%;
   padding:8px;
   margin:5px 0;
+}
+
+/* BOTON FILTRO */
+.btn-filtro {
+  width:100%;
+  padding:10px;
+  background:#ddd;
+  border:none;
 }
 
 /* PRODUCTOS */
@@ -68,14 +66,6 @@ body { margin:0; font-family:Arial; background:#f3f3f3; }
   object-fit:cover;
 }
 
-/* BOTONES */
-button {
-  padding:8px;
-  margin-top:5px;
-  width:100%;
-  cursor:pointer;
-}
-
 /* CARRITO */
 .carrito-panel {
   position:fixed;
@@ -89,12 +79,29 @@ button {
   overflow:auto;
   display:none;
 }
+
+/* MODAL PRODUCTO */
+.modal {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-content {
+  background:white;
+  padding:20px;
+  width:90%;
+  max-width:400px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="logo">ElectroMarketHolguin</div>
 
@@ -107,18 +114,17 @@ button {
   </div>
 </div>
 
-<!-- FILTROS -->
-<div class="filtros">
+<button class="btn-filtro" onclick="toggleFiltros()">☰ Filtros</button>
+
+<div class="filtros" id="filtrosBox">
   <input type="text" id="filtroCategoria" placeholder="Categoría">
   <input type="number" id="precioMin" placeholder="Precio mínimo">
   <input type="number" id="precioMax" placeholder="Precio máximo">
-  <button onclick="cargarProductos()">Filtrar</button>
+  <button onclick="cargarProductos()">Aplicar filtros</button>
 </div>
 
-<!-- PRODUCTOS -->
 <div class="productos" id="productos"></div>
 
-<!-- CARRITO -->
 <div class="carrito-panel" id="carritoPanel">
   <h3>Carrito</h3>
   <div id="carritoItems"></div>
@@ -126,18 +132,10 @@ button {
   <button onclick="vaciarCarrito()">Vaciar carrito</button>
 </div>
 
-<!-- WHATSAPP -->
-<a href="https://wa.me/5351421460" target="_blank" style="
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-color:white;
-padding:15px;
-border-radius:50%;
-font-size:22px;
-text-decoration:none;
-">💬</a>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContent"></div>
+</div>
 
 <script>
 
@@ -166,18 +164,46 @@ function cargarProductos() {
   }
 
   filtrados.forEach(p => {
+
+    let precioFinal = p.enOferta ? p.precioOferta : p.precio;
+
     contenedor.innerHTML += `
       <div class="producto">
-        <img src="${p.imagen}">
+        <img src="${p.imagen || 'https://via.placeholder.com/150'}">
         <h4>${p.nombre}</h4>
         <p>${p.descCorta}</p>
-        <b>$${p.precio}</b>
+        <b>$${precioFinal}</b>
+
+        <button onclick='verProducto(${JSON.stringify(p)})'>
+          Ver producto
+        </button>
+
         <button onclick='agregarCarrito(${JSON.stringify(p)})'>
           Agregar al carrito
         </button>
       </div>
     `;
   });
+}
+
+// 🔹 VER PRODUCTO
+function verProducto(p) {
+  let precioFinal = p.enOferta ? p.precioOferta : p.precio;
+
+  modalContent.innerHTML = `
+    <h2>${p.nombre}</h2>
+    <img src="${p.imagen || 'https://via.placeholder.com/150'}" style="width:100%">
+    <p>${p.descLarga}</p>
+    <h3>$${precioFinal}</h3>
+    <button onclick='agregarCarrito(${JSON.stringify(p)})'>Agregar al carrito</button>
+    <button onclick='cerrarModal()'>Cerrar</button>
+  `;
+
+  modal.style.display = "flex";
+}
+
+function cerrarModal() {
+  modal.style.display = "none";
 }
 
 // 🔹 CARRITO
@@ -219,10 +245,12 @@ function actualizarCarrito() {
   let total = 0;
 
   c.forEach((p,i) => {
-    total += p.precio;
+    let precioFinal = p.enOferta ? p.precioOferta : p.precio;
+    total += precioFinal;
+
     cont.innerHTML += `
       <div>
-        ${p.nombre} - $${p.precio}
+        ${p.nombre} - $${precioFinal}
         <button onclick="eliminarItem(${i})">X</button>
       </div>
     `;
@@ -232,14 +260,20 @@ function actualizarCarrito() {
 }
 
 function toggleCarrito() {
-  let panel = document.getElementById("carritoPanel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
+  carritoPanel.style.display =
+    carritoPanel.style.display === "block" ? "none" : "block";
 }
 
-// 🔍 BUSCAR EN TIEMPO REAL
+// 🔹 FILTROS
+function toggleFiltros() {
+  filtrosBox.style.display =
+    filtrosBox.style.display === "block" ? "none" : "block";
+}
+
+// 🔍 BUSCAR
 busqueda.addEventListener("input", cargarProductos);
 
-// 🚀 INICIAR
+// 🚀 INICIO
 cargarProductos();
 actualizarCarrito();
 
