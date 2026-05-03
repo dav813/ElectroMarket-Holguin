@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – ElectroMarket Holguín</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0044aa;
+      --primary-dark: #002d7a;
+      --primary-light: #0066cc;
+      --accent: #c8a84b;
+      --bg: #e8ecf4;
+      --white: #ffffff;
+      --text: #111;
+      --muted: #888;
+      --border: #dde3f0;
+      --shadow: 0 2px 16px rgba(0,68,170,0.09);
+      --radius: 14px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', Arial, sans-serif; background: var(--bg); padding-top: 64px; }
+
+    /* ─── HEADER (idéntico a index) ─── */
+    .header {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 999;
+      background: #fff; border-bottom: 2px solid var(--accent);
+      display: flex; align-items: center; gap: 10px; padding: 8px 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    }
+    .header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); flex-shrink: 0; }
+    .header-info { display: flex; flex-direction: column; line-height: 1.2; flex: 1; }
+    .header-info strong { font-size: 15px; font-weight: 900; color: var(--primary); }
+    .header-info span   { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .header-actions { display: none; gap: 8px; align-items: center; }
+    .btn-hdr { background: linear-gradient(135deg,#0066cc,#0044aa); color:#fff; border:none; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Poppins',Arial,sans-serif; transition:.2s; }
+    .btn-hdr:hover { opacity:.88; }
+    .btn-hdr.danger { background: linear-gradient(135deg,#e53935,#b71c1c); }
+
+    /* ─── LOGIN ─── */
+    .login-page { display:flex; justify-content:center; align-items:center; min-height:calc(100dvh - 64px); padding:20px; }
+    .login-card { background:#fff; border-radius:22px; padding:42px 36px; width:100%; max-width:400px; box-shadow:0 8px 40px rgba(0,68,170,0.13); border-top:4px solid var(--accent); text-align:center; }
+    .login-card .logo-login { width:74px; height:74px; border-radius:50%; border:3px solid var(--accent); object-fit:cover; margin-bottom:14px; box-shadow:0 0 0 4px rgba(200,168,75,.18); }
+    .login-card h2 { font-size:20px; font-weight:800; color:var(--primary); margin-bottom:4px; }
+    .login-card .sub { font-size:12px; color:var(--muted); margin-bottom:22px; }
+
+    /* ─── FORMS ─── */
+    .form-group { margin-bottom:13px; text-align:left; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:#555; margin-bottom:5px; }
+    .form-group input,.form-group select,.form-group textarea {
+      width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:13px; font-family:'Poppins',Arial,sans-serif; color:#222;
+      transition:border-color .2s; background:#f8faff;
+    }
+    .form-group input[disabled] { background:#f0f0f0; color:#aaa; cursor:not-allowed; }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus { outline:none; border-color:var(--primary); background:#fff; }
+    .form-group textarea { resize:vertical; min-height:72px; }
+
+    .form-row   { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+    /* ─── BTNS ─── */
+    .btn-primary { width:100%; background:linear-gradient(135deg,#0066cc,#0044aa); color:#fff; border:none; padding:12px; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Poppins',Arial,sans-serif; transition:.2s; box-shadow:0 4px 16px rgba(0,68,170,.25); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,68,170,.35); }
+    .btn-row { display:flex; gap:10px; margin-top:16px; }
+    .btn-preview { flex:1; background:linear-gradient(135deg,#c8a84b,#a87d20); color:#fff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',Arial,sans-serif; transition:.2s; }
+    .btn-save    { flex:2; background:linear-gradient(135deg,#0066cc,#0044aa); color:#fff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Poppins',Arial,sans-serif; transition:.2s; }
+    .btn-preview:hover,.btn-save:hover { transform:translateY(-2px); }
+    .btn-sm { padding:5px 10px; border:none; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Poppins',Arial,sans-serif; }
+    .btn-edit { background:#fff3e0; color:#e65100; }
+    .btn-del  { background:#ffebee; color:#c62828; }
+
+    .error-msg { color:#e53935; font-size:12px; margin-top:8px; display:none; text-align:center; }
+
+    /* ─── PANEL ─── */
+    .panel { display:none; }
+    .container { max-width:1120px; margin:0 auto; padding:22px 16px; }
+
+    .card { background:#fff; border-radius:var(--radius); padding:22px; margin-bottom:22px; box-shadow:var(--shadow); border-left:4px solid var(--accent); }
+
+    .section-title { font-size:17px; font-weight:800; color:var(--primary); margin-bottom:18px; display:flex; align-items:center; gap:8px; }
+
+    /* ─── OFERTA TOGGLE ─── */
+    .oferta-toggle { display:flex; align-items:center; gap:10px; padding:10px 14px; background:#f8faff; border:1.5px solid var(--border); border-radius:10px; cursor:pointer; font-size:13px; color:#444; }
+    .oferta-toggle input[type=checkbox] { width:17px; height:17px; accent-color:var(--primary); flex-shrink:0; }
+
+    /* ─── IMG UPLOAD ─── */
+    .img-upload-area { border:2px dashed var(--accent); border-radius:12px; padding:20px; text-align:center; cursor:pointer; background:#fffbf0; transition:.2s; }
+    .img-upload-area:hover { background:#fff8e1; }
+    .img-upload-area input { display:none; }
+    .img-preview-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .img-thumb { position:relative; width:82px; height:82px; }
+    .img-thumb img { width:100%; height:100%; object-fit:cover; border-radius:8px; border:2px solid var(--accent); }
+    .img-thumb .del-img { position:absolute; top:-7px; right:-7px; background:#e53935; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+
+    /* ─── TABLE ─── */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:12.5px; }
+    thead th { background:linear-gradient(135deg,#0066cc,#0044aa); color:#fff; padding:11px 9px; font-size:11.5px; font-weight:600; white-space:nowrap; }
+    tbody td { padding:10px 9px; border-bottom:1px solid #f0f0f0; vertical-align:middle; }
+    tbody tr:hover { background:#f5f8ff; }
+    .row-red    td { background:#fff5f5; }
+    .row-yellow td { background:#fffde7; }
+    .row-green  td { background:#f1fff4; }
+
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+    .badge-red    { background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+    .badge-yellow { background:#fff8e1; color:#f57f17; border:1px solid #ffe082; }
+    .badge-green  { background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
+    .badge-gray   { background:#f5f5f5; color:#666;    border:1px solid #ddd; }
+    .badge-blue   { background:#e3f0ff; color:#0044aa; border:1px solid #90bdf5; }
+
+    /* ─── HISTORIAL ─── */
+    .hist-item { display:flex; gap:12px; align-items:flex-start; padding:12px; border-radius:10px; border:1px solid #eee; margin-bottom:8px; background:#f8faff; }
+    .hist-icon { font-size:22px; flex-shrink:0; }
+    .hist-info { flex:1; font-size:12.5px; line-height:1.7; }
+    .hist-info strong { color:var(--primary); font-size:13.5px; }
+
+    /* ─── MODAL ─── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; justify-content:center; align-items:center; z-index:5000; padding:16px; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:#fff; border-radius:20px; width:100%; max-width:520px; max-height:92vh; overflow-y:auto; padding:26px; position:relative; box-shadow:0 12px 40px rgba(0,0,0,.18); }
+    .modal-close { position:absolute; top:12px; right:14px; background:none; border:none; font-size:22px; cursor:pointer; color:#aaa; font-family:'Poppins',Arial,sans-serif; }
+    .modal-box h3 { font-size:17px; font-weight:800; color:var(--primary); margin-bottom:16px; }
+
+    /* Preview product card styles */
+    .prev-section { background:#f0f4ff; border-radius:12px; padding:6px; margin-bottom:14px; }
+    .prev-section .prev-label { text-align:center; font-size:11px; color:#888; padding:6px 0; }
+    .prev-inner { background:#fff; border-radius:10px; padding:14px; border:1px solid #e8eef8; }
+    .prev-img { width:100%; height:180px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
+    .prev-nombre { font-size:18px; font-weight:800; color:#111; margin-bottom:4px; }
+    .prev-precio { font-size:20px; font-weight:900; color:var(--primary); }
+    .prev-precio-orig { font-size:14px; color:#bbb; text-decoration:line-through; margin-right:6px; }
+    .prev-oferta-tag { background:#e53935; color:#fff; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; display:inline-block; margin-bottom:6px; }
+    .prev-desc { font-size:13px; color:#555; line-height:1.6; margin-top:6px; }
+    .btn-carrito-prev { width:100%; background:linear-gradient(135deg,#0066cc,#0044aa); color:#fff; border:none; padding:11px; border-radius:10px; font-size:14px; font-weight:700; cursor:default; font-family:'Poppins',Arial,sans-serif; margin-top:10px; }
+
+    /* ─── TOAST ─── */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(90px); background:#0044aa; color:#fff; padding:12px 28px; border-radius:50px; font-size:13.5px; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,.2); transition:transform .4s; z-index:9999; font-family:'Poppins',Arial,sans-serif; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+
+    /* ─── STAT CARDS ─── */
+    .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
+    .stat-card { background:#fff; border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); border-top:3px solid var(--accent); }
+    .stat-card .stat-num { font-size:26px; font-weight:900; color:var(--primary); }
+    .stat-card .stat-lbl { font-size:12px; color:var(--muted); font-weight:500; }
+
+    @media(max-width:700px) {
+      .form-row,.form-row-3 { grid-template-columns:1fr; }
+      .btn-row { flex-direction:column; }
+      .stats-row { grid-template-columns:1fr 1fr; }
+    }
+    @media(max-width:380px) {
+      .stats-row { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <header class="header">
+    <img src="logo.jpg" alt="Logo ElectroMarket">
+    <div class="header-info">
+      <strong>ElectroMarket Holguín</strong>
+      <span>Panel de Administración</span>
+    </div>
+    <div class="header-actions" id="headerActions">
+      <button class="btn-hdr" onclick="openModal('modalPass')">🔑 Cambiar contraseña</button>
+      <button class="btn-hdr danger" onclick="logout()">⬅ Salir</button>
+    </div>
+  </header>
+
+  <!-- ── LOGIN ───────────────────────────────────── -->
+  <div class="login-page" id="loginPage">
+    <div class="login-card">
+      <img src="logo.jpg" class="logo-login" alt="Logo">
+      <h2>Panel Administrativo</h2>
+      <p class="sub">ElectroMarket Holguín — Acceso restringido</p>
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" id="inputUser" placeholder="Tu usuario" onkeydown="if(event.key==='Enter')login()">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="inputPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+      </div>
+      <button class="btn-primary" onclick="login()">🔐 Ingresar al panel</button>
+      <p class="error-msg" id="loginError">❌ Usuario o contraseña incorrectos</p>
+    </div>
+  </div>
+
+  <!-- ── PANEL ────────────────────────────────────── -->
+  <div class="panel container" id="adminPanel">
+
+    <!-- Stats -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- AGREGAR / EDITAR PRODUCTO -->
+    <div class="card">
+      <div class="section-title">📦 Agregar / Editar Producto</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>ID (automático)</label>
+          <input id="fId" disabled placeholder="Generado al guardar">
+        </div>
+        <div class="form-group">
+          <label>Nombre del producto *</label>
+          <input id="fNombre" placeholder="Ej: Nevera Samsung 300L">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría *</label>
+          <select id="fCategoria">
+            <option value="">Seleccionar categoría</option>
+            <option>Refrigeración</option>
+            <option>Lavadoras</option>
+            <option>Televisores</option>
+            <option>Cocinas</option>
+            <option>Ventiladores / Aires</option>
+            <option>Computación</option>
+            <option>Audio / Video</option>
+            <option>Pequeños electrodomésticos</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio (CUP) *</label>
+          <input type="number" id="fPrecio" placeholder="0.00" min="0" step="0.01">
+        </div>
+      </div>
+
+      <!-- Oferta -->
+      <div class="form-group">
+        <label>¿Está en oferta / descuento?</label>
+        <label class="oferta-toggle">
+          <input type="checkbox" id="fEnOferta" onchange="toggleOferta()">
+          <span>Sí, activar descuento en este producto</span>
+        </label>
+      </div>
+
+      <div id="ofertaFields" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio de oferta (CUP)</label>
+            <input type="number" id="fPrecioOferta" placeholder="Precio con descuento" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Duración de la oferta (días)</label>
+            <input type="number" id="fDiasOferta" placeholder="Ej: 7" min="1">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cantidad inicial *</label>
+          <input type="number" id="fStockInicial" placeholder="Ej: 10" min="0">
+        </div>
+        <div class="form-group">
+          <label>Cantidad disponible *</label>
+          <input type="number" id="fStockActual" placeholder="Ej: 10" min="0">
+        </div>
+      </div>
+
+      <!-- Imágenes -->
+      <div class="form-group">
+        <label>Imágenes del producto (puedes subir varias)</label>
+        <div class="img-upload-area" onclick="document.getElementById('fImagenes').click()">
+          <div style="font-size:34px">📷</div>
+          <div style="font-size:13px;color:#999;margin-top:6px">Clic aquí para subir imágenes</div>
+          <div style="font-size:11px;color:#bbb;margin-top:3px">PNG, JPG, WEBP — múltiples permitidas</div>
+          <input type="file" id="fImagenes" multiple accept="image/*" onchange="handleImages(this)">
+        </div>
+        <div class="img-preview-grid" id="imgPreviewGrid"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción corta <span style="color:#aaa;font-size:11px">(se muestra en la tarjeta de la tienda)</span></label>
+        <textarea id="fDescCorta" placeholder="Breve descripción — máx. 120 caracteres recomendado" rows="2"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción larga <span style="color:#aaa;font-size:11px">(se muestra al abrir el producto)</span></label>
+        <textarea id="fDescLarga" placeholder="Descripción completa: características, especificaciones, garantía, dimensiones..." rows="4"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-preview" onclick="openPreview()">👁️ Vista previa</button>
+        <button class="btn-save"    onclick="guardarProducto()">💾 Guardar en tienda</button>
+      </div>
+      <div style="margin-top:10px;text-align:center">
+        <button onclick="limpiarForm()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;font-family:'Poppins',Arial,sans-serif;">✕ Limpiar formulario</button>
+      </div>
+    </div>
+
+    <!-- INVENTARIO -->
+    <div class="card">
+      <div class="section-title">📊 Inventario de Productos</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="background:#ffebee;border:1px solid #ef9a9a;border-radius:4px;padding:2px 8px">Rojo</span> Agotado</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:2px 8px">Amarillo</span> Stock bajo (≤2)</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:4px;padding:2px 8px">Verde</span> Con ventas</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:2px 8px">Normal</span> Sin ventas</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio orig.</th>
+              <th>Precio oferta</th>
+              <th>Stock inicial</th>
+              <th>Disponible</th>
+              <th>Vendidos</th>
+              <th>Oferta</th>
+              <th>Días restantes</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaInventario"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="card">
+      <div class="section-title">🛒 Historial de Compras</div>
+      <div id="historialContainer"></div>
+    </div>
+
+  </div>
+
+  <!-- ── MODAL: VISTA PREVIA ──────────────── -->
+  <div class="modal-overlay" id="modalPreview">
+    <div class="modal-box" style="max-width:480px">
+      <button class="modal-close" onclick="closeModal('modalPreview')">✕</button>
+      <h3>👁️ Vista previa del producto</h3>
+      <div id="previewContent"></div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: CAMBIAR CONTRASEÑA ───────── -->
+  <div class="modal-overlay" id="modalPass">
+    <div class="modal-box" style="max-width:400px">
+      <button class="modal-close" onclick="closeModal('modalPass')">✕</button>
+      <h3>🔑 Cambiar contraseña</h3>
+      <div class="form-group">
+        <label>Contraseña actual</label>
+        <input type="password" id="passActual" placeholder="••••••••">
+      </div>
+      <div class="form-group">
+        <label>Nueva contraseña</label>
+        <input type="password" id="passNueva" placeholder="Mín. 6 caracteres">
+      </div>
+      <div class="form-group">
+        <label>Confirmar nueva contraseña</label>
+        <input type="password" id="passConfirmar" placeholder="Repite la nueva contraseña">
+      </div>
+      <button class="btn-primary" onclick="cambiarPass()">✅ Actualizar contraseña</button>
+      <p class="error-msg" id="passError"></p>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ─── CREDENCIALES ─────────────────────────────────
+    const USUARIO = "Marcos";
+    const PASS_DEFAULT = "Marcos*2026";
+    const getPass = () => localStorage.getItem("em_admin_pass") || PASS_DEFAULT;
+
+    // ─── LOGIN ────────────────────────────────────────
+    function login() {
+      const u = document.getElementById("inputUser").value.trim();
+      const p = document.getElementById("inputPass").value;
+      if (u === USUARIO && p === getPass()) {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        document.getElementById("headerActions").style.display = "flex";
+        render();
+      } else {
+        document.getElementById("loginError").style.display = "block";
+      }
+    }
+
+    function logout() {
+      document.getElementById("loginPage").style.display  = "flex";
+      document.getElementById("adminPanel").style.display = "none";
+      document.getElementById("headerActions").style.display = "none";
+      document.getElementById("inputUser").value = "";
+      document.getElementById("inputPass").value = "";
+      document.getElementById("loginError").style.display = "none";
+    }
+
+    // ─── CONTRASEÑA ───────────────────────────────────
+    function cambiarPass() {
+      const actual    = document.getElementById("passActual").value;
+      const nueva     = document.getElementById("passNueva").value;
+      const confirmar = document.getElementById("passConfirmar").value;
+      const errEl     = document.getElementById("passError");
+      errEl.style.display = "none";
+
+      if (actual !== getPass())  { errEl.textContent = "❌ La contraseña actual es incorrecta"; errEl.style.display="block"; return; }
+      if (nueva.length < 6)      { errEl.textContent = "❌ La nueva contraseña debe tener al menos 6 caracteres"; errEl.style.display="block"; return; }
+      if (nueva !== confirmar)   { errEl.textContent = "❌ Las contraseñas no coinciden"; errEl.style.display="block"; return; }
+
+      localStorage.setItem("em_admin_pass", nueva);
+      closeModal("modalPass");
+      showToast("✅ Contraseña actualizada correctamente");
+      ["passActual","passNueva","passConfirmar"].forEach(id => document.getElementById(id).value = "");
+    }
+
+    // ─── STORAGE ─────────────────────────────────────
+    const getProductos = ()  => JSON.parse(localStorage.getItem("em_productos") || "[]");
+    const saveProductos = d  => localStorage.setItem("em_productos", JSON.stringify(d));
+    const getCompras    = ()  => JSON.parse(localStorage.getItem("em_compras")   || "[]");
+
+    const generarID = () => "P" + Date.now();
+    const ventas    = id => getCompras().filter(c => c.productoId === id).reduce((s,c) => s + (c.cantidad||1), 0);
+
+    function diasRestantesOferta(p) {
+      if (!p.enOferta || !p.ofertaInicio || !p.diasOferta) return 0;
+      return Math.max(0, p.diasOferta - Math.floor((Date.now() - p.ofertaInicio) / 86400000));
+    }
+
+    function estadoProducto(p) {
+      const v = ventas(p.id);
+      if (p.stockActual <= 0)  return "red";
+      if (p.stockActual <= 2)  return "yellow";
+      if (v > 0)               return "green";
+      return "gray";
+    }
+
+    // ─── TOAST ────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    // ─── MODAL ────────────────────────────────────────
+    function openModal(id)  { document.getElementById(id).classList.add("open"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+    // ─── IMÁGENES ─────────────────────────────────────
+    let imagenesBase64 = [];
+
+    function handleImages(input) {
+      Array.from(input.files).forEach(file => {
+        const r = new FileReader();
+        r.onload = e => { imagenesBase64.push(e.target.result); renderImgPreviews(); };
+        r.readAsDataURL(file);
+      });
+      input.value = "";
+    }
+
+    function renderImgPreviews() {
+      document.getElementById("imgPreviewGrid").innerHTML = imagenesBase64.map((src,i) => `
+        <div class="img-thumb">
+          <img src="${src}" alt="">
+          <button class="del-img" onclick="removeImg(${i})">✕</button>
+        </div>`).join("");
+    }
+
+    function removeImg(i) { imagenesBase64.splice(i,1); renderImgPreviews(); }
+
+    // ─── OFERTA ───────────────────────────────────────
+    function toggleOferta() {
+      document.getElementById("ofertaFields").style.display =
+        document.getElementById("fEnOferta").checked ? "block" : "none";
+    }
+
+    // ─── GUARDAR ──────────────────────────────────────
+    function guardarProducto() {
+      const nombre = document.getElementById("fNombre").value.trim();
+      const precio = parseFloat(document.getElementById("fPrecio").value);
+      if (!nombre || isNaN(precio) || precio < 0) { showToast("⚠️ Nombre y precio son obligatorios"); return; }
+
+      const enOferta     = document.getElementById("fEnOferta").checked;
+      const precioOferta = parseFloat(document.getElementById("fPrecioOferta").value) || 0;
+      const diasOferta   = parseInt(document.getElementById("fDiasOferta").value) || 0;
+      const stockInicial = parseInt(document.getElementById("fStockInicial").value) || 0;
+      const stockActual  = parseInt(document.getElementById("fStockActual").value)  || 0;
+      const idExistente  = document.getElementById("fId").value || "";
+      const productoExistente = idExistente ? getProductos().find(x => x.id === idExistente) : null;
+
+      const p = {
+        id: idExistente || generarID(),
+        nombre,
+        categoria:    document.getElementById("fCategoria").value,
+        precio,
+        enOferta,
+        precioOferta: enOferta ? precioOferta : 0,
+        diasOferta:   enOferta ? diasOferta   : 0,
+        ofertaInicio: enOferta ? (productoExistente?.ofertaInicio || Date.now()) : null,
+        stockInicial,
+        stockActual,
+        imagenes:  [...imagenesBase64],
+        descCorta: document.getElementById("fDescCorta").value,
+        descLarga: document.getElementById("fDescLarga").value,
+        fechaCreacion: productoExistente?.fechaCreacion || new Date().toISOString(),
+      };
+
+      const lista = getProductos().filter(x => x.id !== p.id);
+      lista.push(p);
+      saveProductos(lista);
+      showToast("✅ Producto guardado y enviado a la tienda");
+      limpiarForm();
+      render();
+    }
+
+    // ─── PREVIEW ──────────────────────────────────────
+    function openPreview() {
+      const nombre      = document.getElementById("fNombre").value   || "Nombre del producto";
+      const precio      = parseFloat(document.getElementById("fPrecio").value) || 0;
+      const enOferta    = document.getElementById("fEnOferta").checked;
+      const pOferta     = parseFloat(document.getElementById("fPrecioOferta").value) || 0;
+      const dias        = parseInt(document.getElementById("fDiasOferta").value) || 0;
+      const descCorta   = document.getElementById("fDescCorta").value || "Sin descripción corta.";
+      const descLarga   = document.getElementById("fDescLarga").value || "Sin descripción larga.";
+      const imgSrc      = imagenesBase64[0] || "https://placehold.co/400x280/e8ecf4/0044aa?text=Sin+imagen";
+
+      const precioHTML = enOferta && pOferta > 0
+        ? `<span class="prev-precio-orig">$${precio.toFixed(2)}</span> <span class="prev-precio" style="color:#e53935">$${pOferta.toFixed(2)}</span>`
+        : `<span class="prev-precio">$${precio.toFixed(2)}</span>`;
+
+      document.getElementById("previewContent").innerHTML = `
+        <div class="prev-section">
+          <div class="prev-label">👇 Tarjeta en la tienda (vista rápida)</div>
+          <div class="prev-inner">
+            <img src="${imgSrc}" class="prev-img">
+            ${enOferta ? `<span class="prev-oferta-tag">🔥 OFERTA — ${dias} días</span><br>` : ""}
+            <div class="prev-nombre">${nombre}</div>
+            <div>${precioHTML}</div>
+            <div class="prev-desc">${descCorta}</div>
+            <button class="btn-carrito-prev">🛒 Agregar al carrito</button>
+          </div>
+        </div>
+        <div class="prev-section">
+          <div class="prev-label">👇 Detalle del producto (al seleccionarlo)</div>
+          <div class="prev-inner">
+            <img src="${imgSrc}" class="prev-img" style="height:200px">
+            ${enOferta ? `<span class="prev-oferta-tag">🔥 OFERTA — ${dias} días restantes</span><br>` : ""}
+            <div class="prev-nombre">${nombre}</div>
+            <div>${precioHTML}</div>
+            <div class="prev-desc" style="border-top:1px solid #eee;margin-top:8px;padding-top:8px">${descLarga}</div>
+            <button class="btn-carrito-prev">🛒 Agregar al carrito</button>
+          </div>
+        </div>
+      `;
+      openModal("modalPreview");
+    }
+
+    // ─── LIMPIAR ──────────────────────────────────────
+    function limpiarForm() {
+      ["fId","fNombre","fPrecio","fPrecioOferta","fDiasOferta","fStockInicial","fStockActual","fDescCorta","fDescLarga"]
+        .forEach(id => { document.getElementById(id).value = ""; });
+      document.getElementById("fCategoria").value = "";
+      document.getElementById("fEnOferta").checked = false;
+      document.getElementById("ofertaFields").style.display = "none";
+      imagenesBase64 = [];
+      renderImgPreviews();
+    }
+
+    // ─── EDITAR ───────────────────────────────────────
+    function editarProducto(id) {
+      const p = getProductos().find(x => x.id === id);
+      if (!p) return;
+      document.getElementById("fId").value          = p.id;
+      document.getElementById("fNombre").value       = p.nombre;
+      document.getElementById("fCategoria").value    = p.categoria || "";
+      document.getElementById("fPrecio").value       = p.precio;
+      document.getElementById("fEnOferta").checked   = p.enOferta || false;
+      document.getElementById("ofertaFields").style.display = p.enOferta ? "block" : "none";
+      document.getElementById("fPrecioOferta").value = p.precioOferta || "";
+      document.getElementById("fDiasOferta").value   = p.diasOferta   || "";
+      document.getElementById("fStockInicial").value = p.stockInicial;
+      document.getElementById("fStockActual").value  = p.stockActual;
+      document.getElementById("fDescCorta").value    = p.descCorta || "";
+      document.getElementById("fDescLarga").value    = p.descLarga || "";
+      imagenesBase64 = [...(p.imagenes || [])];
+      renderImgPreviews();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      showToast("✏️ Editando: " + p.nombre);
+    }
+
+    // ─── ELIMINAR ─────────────────────────────────────
+    function eliminarProducto(id) {
+      if (!confirm("¿Eliminar este producto de la tienda? Esta acción no se puede deshacer.")) return;
+      saveProductos(getProductos().filter(x => x.id !== id));
+      render();
+      showToast("🗑️ Producto eliminado");
+    }
+
+    // ─── RENDER STATS ─────────────────────────────────
+    function renderStats() {
+      const productos = getProductos();
+      const compras   = getCompras();
+      const totalVentas = compras.reduce((s,c) => s + (c.total||0), 0);
+      const agotados  = productos.filter(p => p.stockActual <= 0).length;
+
+      document.getElementById("statsRow").innerHTML = `
+        <div class="stat-card"><div class="stat-num">${productos.length}</div><div class="stat-lbl">📦 Productos</div></div>
+        <div class="stat-card"><div class="stat-num">${compras.length}</div><div class="stat-lbl">🛒 Pedidos</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#2e7d32">$${totalVentas.toFixed(2)}</div><div class="stat-lbl">💰 Total ventas</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#c62828">${agotados}</div><div class="stat-lbl">❌ Agotados</div></div>
+      `;
+    }
+
+    // ─── RENDER INVENTARIO ────────────────────────────
+    function renderInventario() {
+      const tbody    = document.getElementById("tablaInventario");
+      const productos = getProductos();
+      if (productos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;color:#bbb;padding:30px;font-size:14px">No hay productos aún. ¡Agrega el primero arriba! 👆</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = productos.map(p => {
+        const st = estadoProducto(p);
+        const v  = ventas(p.id);
+        const dr = diasRestantesOferta(p);
+        const rowClass  = st === "red" ? "row-red" : st === "yellow" ? "row-yellow" : st === "green" ? "row-green" : "";
+        const stateText = { red:"Agotado", yellow:"Stock bajo", green:"Con ventas", gray:"Sin ventas" };
+        return `
+          <tr class="${rowClass}">
+            <td style="font-size:10px;color:#aaa;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.id}">${p.id.slice(0,8)}…</td>
+            <td><strong>${p.nombre}</strong></td>
+            <td><span class="badge badge-blue">${p.categoria || "-"}</span></td>
+            <td>$${p.precio.toFixed(2)}</td>
+            <td>${p.enOferta && p.precioOferta ? `<strong style="color:#e53935">$${p.precioOferta.toFixed(2)}</strong>` : "<span style='color:#ccc'>—</span>"}</td>
+            <td>${p.stockInicial}</td>
+            <td><strong>${p.stockActual}</strong></td>
+            <td>${v}</td>
+            <td>${p.enOferta ? `<span class="badge badge-red">🔥 Sí</span>` : `<span class="badge badge-gray">No</span>`}</td>
+            <td>${p.enOferta ? (dr > 0 ? `<strong>${dr}</strong> día(s)` : `<span style="color:#e53935;font-size:11px">Expirada</span>`) : "<span style='color:#ccc'>—</span>"}</td>
+            <td><span class="badge badge-${st}">${stateText[st]}</span></td>
+            <td style="white-space:nowrap;display:flex;gap:4px">
+              <button class="btn-sm btn-edit" onclick="editarProducto('${p.id}')">✏️ Editar</button>
+              <button class="btn-sm btn-del"  onclick="eliminarProducto('${p.id}')">🗑️</button>
+            </td>
+          </tr>`;
+      }).join("");
+    }
+
+    // ─── RENDER HISTORIAL ─────────────────────────────
+    function renderHistorial() {
+      const cont     = document.getElementById("historialContainer");
+      const compras  = getCompras();
+      const prods    = getProductos();
+      if (compras.length === 0) {
+        cont.innerHTML = `<p style="color:#bbb;text-align:center;padding:24px;font-size:14px">No hay compras registradas aún.</p>`;
+        return;
+      }
+      cont.innerHTML = [...compras].reverse().map(c => {
+        const p = prods.find(x => x.id === c.productoId);
+        return `
+          <div class="hist-item">
+            <div class="hist-icon">🛒</div>
+            <div class="hist-info">
+              <strong>${p ? p.nombre : c.productoId}</strong><br>
+              Cliente: ${c.cliente || "Anónimo"} &nbsp;•&nbsp;
+              Cantidad: ${c.cantidad || 1} &nbsp;•&nbsp;
+              Total: <strong style="color:#0044aa">$${(c.total || 0).toFixed(2)}</strong><br>
+              <span style="color:#aaa;font-size:11px">${c.fecha}</span>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    // ─── RENDER ───────────────────────────────────────
+    function render() {
+      renderStats();
+      renderInventario();
+      renderHistorial();
+    }
+  </script>
+
+</body>
+</html>
